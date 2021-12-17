@@ -1,0 +1,18 @@
+<!doctype html>
+<title>Server Send Events Demo</title>
+<style>
+  #data {
+    text-align: center;
+  }
+</style>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script>
+if (!!window.EventSource) {
+  var source = new EventSource('/');
+  source.onmessage = function(e) {
+    console.log(e);
+    $("#data").text(e.data);
+  }
+}
+</script>
+<div id="data">nothing received yet</div>
