@@ -2,3 +2,5 @@ node_modules/
 walvis/
 client/.nuxt
 client/dist
+
+__pycache__

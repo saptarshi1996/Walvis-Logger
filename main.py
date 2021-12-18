@@ -35,7 +35,6 @@ def stream_logs(id):
             try:
                 while True:
                     line = next(target)
-                    print(line)
                     yield "data: %s\n\n" % (line.decode("utf-8"))
                     time.sleep(.1)  # an artificial delay
             except StopIteration:
