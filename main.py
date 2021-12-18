@@ -41,7 +41,7 @@ def stream_logs(id):
                 while True:
                     line = next(target)
                     yield "data: %s\n\n" % (line.decode("utf-8"))
-                    time.sleep(0.5)  # an artificial delay
+                    time.sleep(0.2)  # an artificial delay
             except StopIteration:
                 print("Logger stopped")
 
@@ -54,4 +54,4 @@ def stream_logs(id):
 
 
 if __name__ == "__main__":
-    app.run(host='localhost', port=9999)
+    app.run(host='0.0.0.0', port=9999)

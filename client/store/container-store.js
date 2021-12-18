@@ -75,10 +75,8 @@ module.exports = {
     },
 
     setContainerStreamLogs(state, value) {
-      // if (state.containerStreamLogs.length > 300) {
-      //   state.containerStreamLogs.splice(0, 1)
-      // }
       state.containerStreamLogs.push({
+        created_at: new Date().toISOString(),
         message: value,
       });
     },

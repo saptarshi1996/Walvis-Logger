@@ -1,9 +1,9 @@
 <template>
-  <v-row >
-    <v-col cols="3">
+  <v-row>
+    <v-col cols="2">
       <ContainerList :containerList="containerList" />
     </v-col>
-    <v-col cols="9">
+    <v-col cols="10">
       <ContainerLogs />
     </v-col>
   </v-row>

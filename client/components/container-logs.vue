@@ -3,14 +3,17 @@
     <v-card
       id="logList"
       class="overflow-y-auto mx-auto"
-      style="max-height: 95vh"
+      style="max-height: 90vh"
     >
       <v-card-text
         class="text-wrap"
         v-for="(log, i) in containerStreamLogs"
         :key="i"
-        v-text="log.message"
       >
+        <v-chip class="ma-2" color="red" text-color="white">{{
+          log.created_at
+        }}</v-chip>
+        {{ log.message }}
       </v-card-text>
     </v-card>
   </div>

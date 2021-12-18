@@ -6,13 +6,10 @@ WORKDIR /usr/src/app
 
 COPY . ./
 
-
 EXPOSE 9999 3000
-
-CMD ["sh", "-c", "cd client && npm run build && npm run generate"]
-# RUN npm run build
 
 RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install python3-pip -y && apt-get clean -y
 RUN pip3 install -r requirements.txt
 
-RUN ["python3", "main.py"]
+CMD ["sh", "-c", "cd client && npm run build && npm run generate"]
+ENTRYPOINT ["python3", "main.py"]
