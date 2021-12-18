@@ -1,9 +1,14 @@
 import docker
-
+import itertools
 import time
+
 from flask import Flask, Response, request, jsonify
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+
+cors = CORS(app)
+
 client = docker.DockerClient(base_url="unix://var/run/docker.sock")
 
 
@@ -21,11 +26,13 @@ def list_containers():
 
 
 @app.route('/list', methods=["GET"])
+@cross_origin()
 def get():
     return jsonify(Response={"data": list_containers()}), 200
 
 
 @app.route('/stream/<id>')
+@cross_origin()
 def index(id):
 
     # check if the container is running, else don't run the stream
@@ -34,7 +41,6 @@ def index(id):
     if request.headers.get('accept') == 'text/event-stream':
 
         target = container.logs(stream=True, follow=True)
-        print(target)
 
         def events():
 
