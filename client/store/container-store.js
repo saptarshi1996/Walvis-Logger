@@ -1,6 +1,7 @@
 module.exports = {
   state: {
     containerListResponse: {},
+    containerStreamLogs: [],
     sseClientObject: null,
   },
 
@@ -12,6 +13,10 @@ module.exports = {
 
     getSseClientObject(state) {
       return state.sseClientObject;
+    },
+
+    getContainerStreamLogs(state) {
+      return state.containerStreamLogs;
     }
 
   },
@@ -35,7 +40,11 @@ module.exports = {
 
         const sseClient = await this._vm.$sse
           .create(`http://localhost:9999/stream/${containerId}`)
-          .on("message", (msg) => console.info("Message:", msg))
+          .on("message", (msg) => {
+
+            commit("setContainerStreamLogs", msg)
+          
+          })
           .on("error", (err) =>
             console.error("Failed to parse or lost connection:", err)
           )
@@ -47,6 +56,10 @@ module.exports = {
       } catch (ex) {
         console.log(ex.message);
       }
+    },
+
+    clearLogs({ commit }) {
+      commit("setClearLogs");
     }
 
   },
@@ -59,6 +72,19 @@ module.exports = {
 
     setSseClientObject(state, value) {
       state.sseClientObject = value;
+    },
+
+    setContainerStreamLogs(state, value) {
+      // if (state.containerStreamLogs.length > 300) {
+      //   state.containerStreamLogs.splice(0, 1)
+      // }
+      state.containerStreamLogs.push({
+        message: value,
+      });
+    },
+
+    setClearLogs(state) {
+      state.containerStreamLogs = [];
     }
 
   }

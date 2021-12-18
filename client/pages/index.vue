@@ -1,10 +1,10 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="4">
+  <v-row >
+    <v-col cols="3">
       <ContainerList :containerList="containerList" />
     </v-col>
-    <v-col cols="8" sm="8" md="6">
-      <v-card></v-card>
+    <v-col cols="9">
+      <ContainerLogs />
     </v-col>
   </v-row>
 </template>
@@ -13,12 +13,14 @@
 import { mapGetters } from "vuex";
 
 import ContainerList from "../components/container-list.vue";
+import ContainerLogs from "../components/container-logs.vue";
 
 export default {
   name: "IndexPage",
 
   components: {
     ContainerList,
+    ContainerLogs,
   },
 
   async created() {

@@ -43,9 +43,10 @@ export default {
   },
 
   watch: {
-    selectedItem() {
+    async selectedItem() {
       try {
-        this.sseClient.disconnect();
+        await this.$store.dispatch("clearLogs");
+        await this.sseClient.disconnect();
       } catch (ex) {
         console.log(ex.message);
       }
