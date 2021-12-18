@@ -1,60 +1,52 @@
-import docker
-import itertools
 import time
 
 from flask import Flask, Response, request, jsonify
 from flask_cors import CORS, cross_origin
 
+from helpers import (docker_helper)
+
 app = Flask(__name__)
 
 cors = CORS(app)
 
-client = docker.DockerClient(base_url="unix://var/run/docker.sock")
+
+################################  CONTROLLERS ##########################################
 
 
-def list_containers():
-
-    containers = client.containers.list()
-    container_list = []
-    for container in containers:
-        container_list.append({
-            "id": container.id,
-            "name": container.name
-        })
-
-    return container_list
-
-
-@app.route('/list', methods=["GET"])
+@app.route('/container_list', methods=["GET"])
 @cross_origin()
-def get():
-    return jsonify(Response={"data": list_containers()}), 200
+def get_container_list():
+    container_list = docker_helper.list_containers()
+    return jsonify(Response={"data": container_list}), 200
 
 
 @app.route('/stream/<id>')
 @cross_origin()
-def index(id):
+def stream_logs(id):
 
     # check if the container is running, else don't run the stream
-    container = client.containers.get(id)
 
     if request.headers.get('accept') == 'text/event-stream':
-
-        target = container.logs(stream=True, follow=True)
-
         def events():
+
+            container = docker_helper.get_client().containers.get(id)
+            target = container.logs(stream=True, follow=True)
 
             try:
                 while True:
                     line = next(target)
-                    yield "data: %s" % (line)
+                    print(line)
+                    yield "data: %s\n\n" % (line.decode("utf-8"))
                     time.sleep(.1)  # an artificial delay
             except StopIteration:
-                print(f'log stream ended')
-
-        return Response(events(), content_type='text/event-stream')
+                print("Logger stopped")
+            
+        return Response(events(), mimetype='text/event-stream')
 
     return Response(status=400)
+
+
+################################  CONTROLLERS ##########################################
 
 
 if __name__ == "__main__":

@@ -5,7 +5,11 @@
         <v-list dense>
           <v-subheader>CONTAINERS</v-subheader>
           <v-list-item-group v-model="selectedItem" color="error">
-            <v-list-item v-for="(item, i) in containerList" :key="i" @click.prevent="getLogs(item.id)">
+            <v-list-item
+              v-for="(item, i) in containerList"
+              :key="i"
+              @click.prevent="getLogs(item.id)"
+            >
               <v-list-item-content>
                 <v-list-item-title v-text="item.name"></v-list-item-title>
               </v-list-item-content>
@@ -20,23 +24,21 @@
   </v-row>
 </template>
 
-
 <script>
-
 import Vue from "vue";
-import VueSSE from 'vue-sse';
+import VueSSE from "vue-sse";
 
 // using defaults
 Vue.use(VueSSE);
 
 export default {
-
   name: "IndexPage",
 
   data() {
     return {
       containerList: [],
       selectedItem: null,
+      sseClient: null,
     };
   },
 
@@ -46,19 +48,34 @@ export default {
 
   methods: {
     async getContainerList() {
-      const { data } = await this.$axios.get("/list");
-      this.containerList = data.Response.data;
+      try {
+        const { data } = await this.$axios.get("/container_list");
+        this.containerList = data.Response.data;
+      } catch (ex) {
+        console.log(ex.message);
+      }
     },
 
-    getLogs(id) {
-      this.$sse.create(`http://localhost:9999/stream/${id}`)
-        .on('message', (msg) => console.info('Message:', msg))
-        .on('error', (err) => console.error('Failed to parse or lost connection:', err))
+    async getLogs(id) {
+      this.sseClient = await this.$sse
+        .create(`http://localhost:9999/stream/${id}`)
+        .on("message", (msg) => console.info("Message:", msg))
+        .on("error", (err) =>
+          console.error("Failed to parse or lost connection:", err)
+        )
         .connect()
-        .catch((err) => console.error('Failed make initial connection:', err));
+        .catch((err) => console.error("Failed make initial connection:", err));
     },
+  },
 
+  watch: {
+    selectedItem(value) {
+      try {
+        this.sseClient.disconnect();
+      } catch (ex) {
+        console.log(ex.message);
+      }
+    },
   },
 };
-
 </script>
