@@ -1,16 +1,21 @@
 import time
 
-from flask import Flask, Response, request, jsonify
+from flask import Flask, Response, request, jsonify, render_template
 from flask_cors import CORS, cross_origin
 
 from helpers import (docker_helper)
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="./client/dist/_nuxt",
+            template_folder="./client/dist")
 
 cors = CORS(app)
 
 
 ################################  CONTROLLERS ##########################################
+
+@app.route("/")
+def index():
+    return render_template("index.html")
 
 
 @app.route('/container_list', methods=["GET"])
@@ -39,7 +44,7 @@ def stream_logs(id):
                     time.sleep(0.5)  # an artificial delay
             except StopIteration:
                 print("Logger stopped")
-            
+
         return Response(events(), mimetype='text/event-stream')
 
     return Response(status=400)
