@@ -31,7 +31,7 @@ export default {
 
   watch: {
     async containerStreamLogs() {
-      var container = this.$el.querySelector("#logList");
+      const container = this.$el.querySelector("#logList");
       if (container) {
         await this.$nextTick();
         container.scrollTop += container.scrollHeight;
