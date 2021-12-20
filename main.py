@@ -1,6 +1,7 @@
 import time
 
 from flask import Flask, Response, request, jsonify, render_template
+from flask.typing import StatusCode
 from flask_cors import CORS, cross_origin
 
 from helpers import (docker_helper)
@@ -47,6 +48,18 @@ def stream_logs(id):
         return Response(events(), mimetype='text/event-stream')
 
     return Response(status=400)
+
+
+@app.route("/close_container/<id>", methods=['GET'])
+@cross_origin()
+def close_container_by_id(id):
+
+    # close the container by container id
+    try:
+        docker_helper.close_container_by_id(id)
+        return jsonify(StatusCode=200, Response={"message": "Container {0} closed successfully".format(id)}), 200
+    except Exception as e:
+        return jsonify(StatusCode=500, Response={"message": "Internal Server Error"}), 500
 
 
 ################################  CONTROLLERS ##########################################
