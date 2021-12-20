@@ -46,10 +46,13 @@ export default {
   methods: {
     async getContainerList() {
       try {
+        this.containerListLoading = true;
         await this.$store.dispatch("getContainerListAction");
         this.containerList = this.containerListResponse;
         console.log(this.containerList);
+        this.containerListLoading = false;
       } catch (ex) {
+        this.containerListLoading = false;
         console.log(ex.message);
       }
     },

@@ -1,7 +1,9 @@
 <template>
   <v-app dark>
     <v-app-bar :clipped-left="clipped" fixed app>
-      <v-toolbar-title v-text="title" />
+      <v-container>
+        <v-toolbar-title v-text="title" />
+      </v-container>
     </v-app-bar>
     <v-main>
       <Nuxt />

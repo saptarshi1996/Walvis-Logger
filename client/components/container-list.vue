@@ -1,13 +1,13 @@
 <template>
   <v-card class="mx-auto" max-width="300" tile>
-    <v-list dense>
+    <v-list>
       <v-subheader
         >CONTAINERS
         <v-btn @click.prevent="clearLogs" color="error" class="ml-5" small
           >Clear</v-btn
         ></v-subheader
       >
-      <v-list-item-group v-model="selectedItem" color="error">
+      <v-list-item-group v-model="selectedItem">
         <v-list-item v-for="(item, i) in containerList" :key="i">
           <v-list-item-content>
             <v-list-item-title>
@@ -26,6 +26,9 @@
               >
             </p>
           </v-list-item-content>
+        </v-list-item>
+        <v-list-item v-if="containerListLoading" class="mt-3 mb-3 d-flex justify-center">
+          <InfiniteLoader />
         </v-list-item>
       </v-list-item-group>
     </v-list>
