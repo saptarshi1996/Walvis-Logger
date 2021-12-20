@@ -10,7 +10,6 @@ app = Flask(__name__, static_folder="./client/dist/_nuxt",
 
 cors = CORS(app)
 
-
 ################################  CONTROLLERS ##########################################
 
 @app.route("/")
