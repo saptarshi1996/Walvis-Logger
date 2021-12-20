@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="2">
-      <ContainerList :containerList="containerList" />
+      <ContainerList :containerList="containerList" :containerListLoading="containerListLoading" />
     </v-col>
     <v-col cols="10">
       <ContainerLogs />
@@ -14,6 +14,7 @@ import { mapGetters } from "vuex";
 
 import ContainerList from "../components/container-list.vue";
 import ContainerLogs from "../components/container-logs.vue";
+import InfiniteLoader from "../components/infinite-loader.vue";
 
 export default {
   name: "IndexPage",
@@ -21,6 +22,7 @@ export default {
   components: {
     ContainerList,
     ContainerLogs,
+    InfiniteLoader,
   },
 
   async created() {
@@ -30,6 +32,8 @@ export default {
   data() {
     return {
       containerList: [],
+      loading: false,
+      containerListLoading: false,
     };
   },
 

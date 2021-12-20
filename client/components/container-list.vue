@@ -49,7 +49,7 @@ export default {
     }),
   },
 
-  props: ["containerList"],
+  props: ["containerList", "containerListLoading"],
 
   methods: {
     async getLogs(id) {
