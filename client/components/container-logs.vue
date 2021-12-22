@@ -10,7 +10,7 @@
         v-for="(log, i) in containerStreamLogs"
         :key="i"
       >
-        <v-chip class="ma-2" color="red" text-color="white">{{
+        <v-chip class="ma-2" color="primary" text-color="white">{{
           log.created_at
         }}</v-chip>
         {{ log.message }}

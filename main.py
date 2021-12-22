@@ -5,8 +5,7 @@ from flask_cors import CORS, cross_origin
 
 from helpers import (docker_helper)
 
-app = Flask(__name__, static_folder="./client/dist/_nuxt",
-            template_folder="./client/dist")
+app = Flask(__name__, static_folder="./client/dist/_nuxt", template_folder="./client/dist")
 
 cors = CORS(app)
 
@@ -29,18 +28,22 @@ def get_container_list():
 def stream_logs(id):
 
     # check if the container is running, else don't run the stream
+    tail = request.args.get('tail')
+
+    if tail != "all":
+        tail = int(tail)
 
     if request.headers.get('accept') == 'text/event-stream':
         def events():
 
             container = docker_helper.get_client().containers.get(id)
-            target = container.logs(stream=True, follow=True)
+            target = container.logs(stream=True, follow=True, tail=tail)
 
             try:
                 while True:
                     line = next(target)
                     yield "data: %s\n\n" % (line.decode("utf-8"))
-                    time.sleep(0.2)  # an artificial delay
+                    time.sleep(0.1)  # an artificial delay
             except StopIteration:
                 print("Logger stopped")
 

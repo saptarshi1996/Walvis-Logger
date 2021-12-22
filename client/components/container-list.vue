@@ -1,11 +1,10 @@
 <template>
-  <v-card class="mx-auto" max-width="300" tile>
-    <v-list>
-      <v-subheader
-        >CONTAINERS
-        <v-btn @click.prevent="clearLogs" color="error" class="ml-5" small
-          >Clear</v-btn
-        ></v-subheader
+  <v-card class="mx-auto" tile>
+    <v-list flat shaped>
+      <v-subheader>
+        CONTAINERS
+        <Options v-on:selected-tail="selectedTail" v-on:trigger-clear-logs="clearLogs" :tailSwitch="tailSwitch" />
+      </v-subheader
       >
       <v-list-item-group v-model="selectedItem">
         <v-list-item v-for="(item, i) in containerList" :key="i">
@@ -15,19 +14,13 @@
             </v-list-item-title>
             <p class="mt-2">
               <v-btn @click.prevent="getLogs(item.id)" small>Logs</v-btn>
-              <v-btn @click.prevent="restartContainer(item.id)" small
-                >Restart</v-btn
-              >
-              <v-btn
-                @click.prevent="closeContainer(item.id)"
-                small
-                color="error"
-                >Close</v-btn
-              >
             </p>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-if="containerListLoading" class="mt-3 mb-3 d-flex justify-center">
+        <v-list-item
+          v-if="containerListLoading"
+          class="mt-3 mb-3 d-flex justify-center"
+        >
           <InfiniteLoader />
         </v-list-item>
       </v-list-item-group>
@@ -36,12 +29,15 @@
 </template>
 
 <script>
+
 import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
       selectedItem: null,
+      tailSwitch: true,
+      tailLimit: "all",
     };
   },
 
@@ -55,6 +51,11 @@ export default {
   props: ["containerList", "containerListLoading"],
 
   methods: {
+
+    selectedTail(value) {
+      this.tailLimit = value;
+    },
+
     async getLogs(id) {
       await this.$store.dispatch("clearLogs");
       try {
@@ -62,7 +63,10 @@ export default {
       } catch (ex) {
         console.log(ex.message);
       }
-      this.$store.dispatch("getContainerLogsStream", id);
+      this.$store.dispatch("getContainerLogsStream", {
+        containerId: id,
+        tail: this.tailLimit,
+      });
     },
 
     async restartContainer(id) {},
@@ -81,6 +85,11 @@ export default {
       }
       await this.$store.dispatch("clearLogs");
     },
+
   },
+
+  watch: {
+
+  }
 };
 </script>

@@ -1,9 +1,9 @@
 <template>
   <v-row>
-    <v-col cols="2">
+    <v-col cols="3">
       <ContainerList :containerList="containerList" :containerListLoading="containerListLoading" />
     </v-col>
-    <v-col cols="10">
+    <v-col cols="9">
       <ContainerLogs />
     </v-col>
   </v-row>
@@ -15,6 +15,7 @@ import { mapGetters } from "vuex";
 import ContainerList from "../components/container-list.vue";
 import ContainerLogs from "../components/container-logs.vue";
 import InfiniteLoader from "../components/infinite-loader.vue";
+import Options from "../components/options.vue";
 
 export default {
   name: "IndexPage",
@@ -23,6 +24,7 @@ export default {
     ContainerList,
     ContainerLogs,
     InfiniteLoader,
+    Options,
   },
 
   async created() {

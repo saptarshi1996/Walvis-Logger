@@ -35,11 +35,11 @@ module.exports = {
       }
     },
 
-    async getContainerLogsStream({ commit }, containerId) {
+    async getContainerLogsStream({ commit }, container) {
       try {
 
         const sseClient = await this._vm.$sse
-          .create(`http://localhost:9999/stream/${containerId}`)
+          .create(`http://localhost:9999/stream/${container.containerId}?tail=${container.tail}`)
           .on("message", (msg) => {
 
             commit("setContainerStreamLogs", msg)
