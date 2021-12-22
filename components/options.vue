@@ -28,7 +28,9 @@
 
           <v-list-item>
             <v-list-item-action>
-              <v-btn @click.prevent="$emit('trigger-clear-logs')" color="primary"
+              <v-btn
+                @click.prevent="$emit('trigger-clear-logs')"
+                color="primary"
                 >Clear Logs</v-btn
               >
             </v-list-item-action>

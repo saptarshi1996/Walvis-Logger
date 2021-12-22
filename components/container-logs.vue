@@ -1,9 +1,10 @@
 <template>
   <v-card class="overflow-y-auto mx-auto" style="max-height: 93vh">
-    <div class="text-wrap ma-2" v-for="(log, i) in containerStreamLogs" :key="i">
-      <!-- <v-chip class="ma-2" color="primary" text-color="white">{{
-          log.created_at
-        }}</v-chip> -->
+    <div
+      class="text-wrap ma-2"
+      v-for="(log, i) in containerStreamLogs"
+      :key="i"
+    >
       <v-chip color="primary" text-color="white">
         {{ log.created_at }}
       </v-chip>

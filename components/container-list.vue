@@ -3,9 +3,12 @@
     <v-list flat shaped>
       <v-subheader>
         CONTAINERS
-        <Options v-on:selected-tail="selectedTail" v-on:trigger-clear-logs="clearLogs" :tailSwitch="tailSwitch" />
-      </v-subheader
-      >
+        <Options
+          v-on:selected-tail="selectedTail"
+          v-on:trigger-clear-logs="clearLogs"
+          :tailSwitch="tailSwitch"
+        />
+      </v-subheader>
       <v-list-item-group v-model="selectedItem">
         <v-list-item v-for="(item, i) in containerList" :key="i">
           <v-list-item-content>
@@ -29,7 +32,6 @@
 </template>
 
 <script>
-
 import { mapGetters } from "vuex";
 
 export default {
@@ -51,7 +53,6 @@ export default {
   props: ["containerList", "containerListLoading"],
 
   methods: {
-
     selectedTail(value) {
       this.tailLimit = value;
     },
@@ -85,11 +86,8 @@ export default {
       }
       await this.$store.dispatch("clearLogs");
     },
-
   },
 
-  watch: {
-
-  }
+  watch: {},
 };
 </script>
