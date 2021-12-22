@@ -1,6 +1,6 @@
 node_modules/
 walvis/
-client/.nuxt
-client/dist
+.nuxt/
+dist/
 
 __pycache__

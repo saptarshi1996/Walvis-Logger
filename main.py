@@ -5,7 +5,7 @@ from flask_cors import CORS, cross_origin
 
 from helpers import (docker_helper)
 
-app = Flask(__name__, static_folder="./client/dist/_nuxt", template_folder="./client/dist")
+app = Flask(__name__, static_folder="./dist/_nuxt", template_folder="./dist")
 
 cors = CORS(app)
 

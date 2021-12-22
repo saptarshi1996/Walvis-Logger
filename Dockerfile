@@ -10,6 +10,6 @@ EXPOSE 9999 3000
 
 RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install python3-pip -y && apt-get clean -y
 RUN pip3 install -r requirements.txt
+RUN npm install
 
-CMD ["sh", "-c", "cd client && npm run build && npm run generate"]
-ENTRYPOINT ["python3", "main.py"]
+CMD ["sh", "-c", "npm run build && npm run generate && python3 main.py"]
