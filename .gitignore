@@ -4,3 +4,5 @@ walvis/
 dist/
 
 __pycache__
+
+static/sw.js
