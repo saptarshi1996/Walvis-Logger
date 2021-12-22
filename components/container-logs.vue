@@ -1,22 +1,15 @@
 <template>
-  <div>
-    <v-card
-      id="logList"
-      class="overflow-y-auto mx-auto"
-      style="max-height: 90vh"
-    >
-      <v-card-text
-        class="text-wrap"
-        v-for="(log, i) in containerStreamLogs"
-        :key="i"
-      >
-        <v-chip class="ma-2" color="primary" text-color="white">{{
+  <v-card class="overflow-y-auto mx-auto" style="max-height: 93vh">
+    <div class="text-wrap ma-2" v-for="(log, i) in containerStreamLogs" :key="i">
+      <!-- <v-chip class="ma-2" color="primary" text-color="white">{{
           log.created_at
-        }}</v-chip>
-        {{ log.message }}
-      </v-card-text>
-    </v-card>
-  </div>
+        }}</v-chip> -->
+      <v-chip color="primary" text-color="white">
+        {{ log.created_at }}
+      </v-chip>
+      {{ log.message }}
+    </div>
+  </v-card>
 </template>
 
 <script>
