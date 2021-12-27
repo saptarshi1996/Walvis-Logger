@@ -15,7 +15,6 @@ cors = CORS(app)
 def index():
     return render_template("index.html")
 
-
 @app.route('/container_list', methods=["GET"])
 @cross_origin()
 def get_container_list():
@@ -30,7 +29,7 @@ def stream_logs(id):
     # check if the container is running, else don't run the stream
     tail = request.args.get('tail')
 
-    if tail != "all":
+    if tail and tail != "all":
         tail = int(tail)
 
     if request.headers.get('accept') == 'text/event-stream':
@@ -69,3 +68,4 @@ def close_container_by_id(id):
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=9999)
+
