@@ -38,6 +38,7 @@ module.exports = {
     async getContainerLogsStream({ commit }, container) {
       try {
 
+        const baseURL = process.env.BASE_URL ? process.env.BASE_URL : "/";
         const sseClient = await this._vm.$sse
           .create(`http://localhost:9999/stream/${container.containerId}?tail=${container.tail}`)
           .on("message", (msg) => {

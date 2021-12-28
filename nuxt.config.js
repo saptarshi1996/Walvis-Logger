@@ -1,4 +1,6 @@
 import colors from 'vuetify/es5/util/colors'
+import { config } from "dotenv";
+config();
 
 export default {
 
@@ -81,6 +83,14 @@ export default {
       }
     }
   },
+  
+  // env: {
+  //   BASE_URL: process.env.BASE_URL,
+  // },
+
+  // router: {
+  //   base: process.env.BASE_URL ? process.env.BASE_URL : '/'
+  // },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
