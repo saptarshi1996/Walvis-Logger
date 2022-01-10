@@ -15,6 +15,7 @@ cors = CORS(app)
 def index():
     return render_template("index.html")
 
+
 @app.route('/container_list', methods=["GET"])
 @cross_origin()
 def get_container_list():
@@ -68,4 +69,3 @@ def close_container_by_id(id):
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=9999)
-
