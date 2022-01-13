@@ -34,7 +34,6 @@ def list_containers():
         return []
 
 
-
 def close_container_by_id(id):
 
     """
