@@ -4,7 +4,12 @@
       <ContainerList :containerList="containerList" :containerListLoading="containerListLoading" />
     </v-col>
     <v-col cols="9">
-      <ContainerLogs />
+      <template v-if="mode === 'logs'">
+        <ContainerLogs />
+      </template>
+      <template v-if="mode === 'stats'">
+        <ContainerStatsDisplay />
+      </template>
     </v-col>
   </v-row>
 </template>
@@ -15,15 +20,18 @@ import { mapGetters } from "vuex";
 import ContainerList from "../components/container-list.vue";
 import ContainerLogs from "../components/container-logs.vue";
 import InfiniteLoader from "../components/infinite-loader.vue";
+import ContainerStatsDisplay from "../components/container-stats-display.vue";
 import Options from "../components/options.vue";
 
 export default {
+
   name: "IndexPage",
 
   components: {
     ContainerList,
     ContainerLogs,
     InfiniteLoader,
+    ContainerStatsDisplay,
     Options,
   },
 
@@ -42,6 +50,7 @@ export default {
   computed: {
     ...mapGetters({
       containerListResponse: "getContainerListResponse",
+      mode: "getMode",
     }),
   },
 
@@ -59,5 +68,6 @@ export default {
       }
     },
   },
+
 };
 </script>

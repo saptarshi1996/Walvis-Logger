@@ -54,9 +54,28 @@ def stream_logs(id):
 
 @app.route('/stats/<id>')
 @cross_origin()
-def stats(id):
+def stream_stats(id):
 
-    pass
+    if request.headers.get("accept") == 'text/event-stream':
+
+        def events():
+
+            container = docker_helper.get_client().containers.get(id)
+            streams = container.stats(stream=True)
+
+            print(streams)
+
+            try:
+                while True:
+                    line = next(streams)
+                    yield "data: %s\n\n" % (line.decode("utf-8"))
+                    time.sleep(0.1)  # an artificial delay
+            except StopIteration:
+                print("Logger stopped")
+        
+        return Response(events(), mimetype='text/event-stream')
+    
+    return Response(status=400)
 
 
 @app.route("/close_container/<id>", methods=['GET'])

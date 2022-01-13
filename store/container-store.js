@@ -2,7 +2,10 @@ module.exports = {
   state: {
     containerListResponse: {},
     containerStreamLogs: [],
+    containerStreamStats: {},
     sseClientObject: null,
+    sseStatsClientObject: null,
+    mode: "logs",
   },
 
   getters: {
@@ -15,9 +18,25 @@ module.exports = {
       return state.sseClientObject;
     },
 
+    getSseStatsClientObject(state) {
+      return state.sseStatsClientObject;
+    },
+
     getContainerStreamLogs(state) {
       return state.containerStreamLogs;
-    }
+    },
+
+    getContainerStreamStats(state) { 
+      try {
+        return JSON.parse(state.containerStreamStats);
+      } catch (ex) {
+        return {};
+      }
+    },
+
+    getMode(state) {
+      return state.mode;
+    },
 
   },
 
@@ -35,15 +54,37 @@ module.exports = {
       }
     },
 
+    async getContainerStatsStream({ commit }, container) {
+      try {
+
+        const sseClientObject = await this._vm.$sse
+        .create(`http://localhost:9999/stats/${container.containerId}`)
+        .on("message", (msg) => {
+          
+          commit("setContainerStreamStats", msg);
+
+        })
+        .on("error", (err) =>
+          console.error("Failed to parse or lost connection:", err)
+        )
+        .connect()
+        .catch((err) => console.error("Failed make initial connection:", err));
+
+        commit("setSseStatsClientObject", sseClientObject);
+
+      } catch (ex) {
+        console.log(ex.message);
+      }
+    },
+
     async getContainerLogsStream({ commit }, container) {
       try {
 
-        const baseURL = process.env.BASE_URL ? process.env.BASE_URL : "/";
         const sseClient = await this._vm.$sse
           .create(`http://localhost:9999/stream/${container.containerId}?tail=${container.tail}`)
           .on("message", (msg) => {
 
-            commit("setContainerStreamLogs", msg)
+            commit("setContainerStreamLogs", msg);
           
           })
           .on("error", (err) =>
@@ -61,18 +102,30 @@ module.exports = {
 
     clearLogs({ commit }) {
       commit("setClearLogs");
+    },
+
+    triggerMode({ commit }, mode) { 
+      commit("setMode", mode);
     }
 
   },
 
   mutations: {
 
-    setContainerListResponse(state, value) {
-      state.containerListResponse = value;
+    setSseStatsClientObject(state, value) {
+      state.sseStatsClientObject = value;
     },
 
     setSseClientObject(state, value) {
       state.sseClientObject = value;
+    },
+
+    setContainerListResponse(state, value) {
+      state.containerListResponse = value;
+    },
+
+    setContainerStreamStats(state, value) {
+      state.containerStreamStats = value;
     },
 
     setContainerStreamLogs(state, value) {
@@ -84,7 +137,11 @@ module.exports = {
 
     setClearLogs(state) {
       state.containerStreamLogs = [];
-    }
+    },
+
+    setMode(state, mode) {
+      state.mode = mode;
+    },
 
   }
 };

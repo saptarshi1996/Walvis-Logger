@@ -33,6 +33,7 @@
 </template>
 
 <script>
+
 import { mapGetters } from "vuex";
 
 import ContainerStats from "./container-stats";
@@ -65,19 +66,20 @@ export default {
     },
 
     async getLogs(id) {
+      await this.$store.dispatch("triggerMode", "logs");
       await this.$store.dispatch("clearLogs");
+
       try {
         await this.sseClient.disconnect();
       } catch (ex) {
         console.log(ex.message);
       }
+
       this.$store.dispatch("getContainerLogsStream", {
         containerId: id,
         tail: this.tailLimit,
       });
     },
-
-    async restartContainer(id) {},
 
     async closeContainer(id) {
       try {
