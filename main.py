@@ -63,8 +63,6 @@ def stream_stats(id):
             container = docker_helper.get_client().containers.get(id)
             streams = container.stats(stream=True)
 
-            print(streams)
-
             try:
                 while True:
                     line = next(streams)
