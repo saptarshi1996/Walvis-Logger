@@ -17,6 +17,7 @@
             </v-list-item-title>
             <p class="mt-2">
               <v-btn @click.prevent="getLogs(item.id)" small>Logs</v-btn>
+              <ContainerStats :item="item" />
             </p>
           </v-list-item-content>
         </v-list-item>
@@ -34,6 +35,8 @@
 <script>
 import { mapGetters } from "vuex";
 
+import ContainerStats from "./container-stats";
+
 export default {
   data() {
     return {
@@ -41,6 +44,10 @@ export default {
       tailSwitch: true,
       tailLimit: "all",
     };
+  },
+
+  components: {
+    ContainerStats,
   },
 
   computed: {

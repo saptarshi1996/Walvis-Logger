@@ -52,6 +52,13 @@ def stream_logs(id):
     return Response(status=400)
 
 
+@app.route('/stats/<id>')
+@cross_origin()
+def stats(id):
+
+    pass
+
+
 @app.route("/close_container/<id>", methods=['GET'])
 @cross_origin()
 def close_container_by_id(id):
