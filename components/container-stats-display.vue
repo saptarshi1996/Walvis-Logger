@@ -8,7 +8,7 @@
     <v-card class="mx-auto mt-5">
       <v-card-title>Container details</v-card-title>
       <v-card-text>
-        <h3>Name: {{ containerStreamStats.name.replace("/", "") }}</h3>
+        <h3>Name: {{ containerStreamStats.name }}</h3>
         <h4>PID: {{ containerStreamStats.id }}</h4>
       </v-card-text>
     </v-card>
