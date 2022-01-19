@@ -21,6 +21,7 @@ Walvis uses a number of tools and frameworks:
 - [Vuetify] - UI library used for Walvis.
 - [Server-Side-Events] - For real time streaming of stats and logs.
 - [Docker] - Without docker, there are no logs.
+- [Docker-Compose] - For building images and starting containers.
 
 and Walvis itself :)
 
@@ -59,27 +60,14 @@ $ npm run generate
 
 ## Docker
 
-Walvis can be build with docker
 
-```sh
-
-# pull image from docker hub 
-docker pull saptarshisg96/walvis-logger
-
-# build image
-docker build -t <youruser>/walvis-logger .
-
-```
-
-This will create the walvis image and pull in the necessary dependencies..
-
-Once done, run the Docker image and map the port to whatever you wish on
+Run the Docker images and map the port to whatever you wish on
 your host.
 
 Note: It is mandatory to provide the volume, otherwise the container will not be able to get the logs.
 
 ```sh
-docker run -it --volume=/var/run/docker.sock:/var/run/docker.sock -p 9999:9999 saptarshisg96/walvis-logger
+docker compose up --build -d
 ```
 
 You can then see the logger working on 

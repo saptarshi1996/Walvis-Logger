@@ -6,10 +6,3 @@ dist/
 __pycache__
 
 static/sw.js
-
-node_modules/
-.nuxt
-dist/
-
-.env
-env

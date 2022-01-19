@@ -1,29 +1,25 @@
 import time
 
-from flask import Flask, Response, request, jsonify, render_template
+from flask import Flask, Response, request, jsonify
 from flask_cors import CORS, cross_origin
 
 from helpers import (docker_helper)
 
-app = Flask(__name__, static_folder="./dist/_nuxt", template_folder="./dist")
+app = Flask(__name__)
 
 cors = CORS(app)
 
 ################################  CONTROLLERS ##########################################
 
-@app.route("/")
-def index():
-    return render_template("index.html")
 
-
-@app.route('/container_list', methods=["GET"])
+@app.route('/logger-server/container_list', methods=["GET"])
 @cross_origin()
 def get_container_list():
     container_list = docker_helper.list_containers()
     return jsonify(Response={"data": container_list}), 200
 
 
-@app.route('/stream/<id>')
+@app.route('/logger-server/stream/<id>')
 @cross_origin()
 def stream_logs(id):
 
@@ -52,7 +48,7 @@ def stream_logs(id):
     return Response(status=400)
 
 
-@app.route('/stats/<id>')
+@app.route('/logger-server/stats/<id>')
 @cross_origin()
 def stream_stats(id):
 
@@ -76,7 +72,7 @@ def stream_stats(id):
     return Response(status=400)
 
 
-@app.route("/close_container/<id>", methods=['GET'])
+@app.route("/logger-server/close_container/<id>", methods=['GET'])
 @cross_origin()
 def close_container_by_id(id):
 
@@ -92,4 +88,4 @@ def close_container_by_id(id):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=9999)
+    app.run(host='0.0.0.0', port=9099)

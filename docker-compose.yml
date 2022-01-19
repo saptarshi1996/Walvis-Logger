@@ -1,0 +1,35 @@
+version: "3"
+
+
+services:
+
+    walvis_server:
+        working_dir: "/app"
+
+        ports:
+            - "9099:9099"
+
+        build:
+            context: ./server
+            dockerfile: Dockerfile
+
+        command: bash -c "python3 main.py"
+
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+
+    walvis_client:
+
+        working_dir: "/app"
+
+        build:
+            context: ./client
+            dockerfile: Dockerfile
+
+        ports:
+            - "3300:3300"
+
+        command: bash -c "npm run build && npm run generate && npm run start"
+
+        depends_on:
+            - walvis_server

@@ -4,7 +4,7 @@ config();
 
 export default {
 
-  target: "static",
+  target: "server",
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
@@ -55,7 +55,7 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: 'http://0.0.0.0:9999',
+    baseURL: 'http://localhost:9099',
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
@@ -88,11 +88,15 @@ export default {
   //   BASE_URL: process.env.BASE_URL,
   // },
 
-  // router: {
-  //   base: process.env.BASE_URL ? process.env.BASE_URL : '/'
-  // },
+  router: {
+    base: process.env.BASE_ENDPOINT,
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+  },
+
+  env: { 
+    ENVIRONMENT: process.env.ENVIRONMENT,
   }
 }

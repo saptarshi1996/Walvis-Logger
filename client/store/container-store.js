@@ -45,7 +45,7 @@ module.exports = {
     async getContainerListAction({ commit }, registerObject) {
       try {
 
-        const { data } = await this.$axios.get("/container_list", registerObject);
+        const { data } = await this.$axios.get("/logger-server/container_list", registerObject);
         console.log(data.Response.data);
         commit("setContainerListResponse", data.Response.data);
 
@@ -58,7 +58,7 @@ module.exports = {
       try {
 
         const sseClientObject = await this._vm.$sse
-        .create(`http://localhost:9999/stats/${container.containerId}`)
+        .create(`http://localhost:9099/logger-server/stats/${container.containerId}`)
         .on("message", (msg) => {
           
           commit("setContainerStreamStats", msg);
@@ -81,7 +81,7 @@ module.exports = {
       try {
 
         const sseClient = await this._vm.$sse
-          .create(`http://localhost:9999/stream/${container.containerId}?tail=${container.tail}`)
+          .create(`http://localhost:9099/logger-server/stream/${container.containerId}?tail=${container.tail}`)
           .on("message", (msg) => {
 
             commit("setContainerStreamLogs", msg);
