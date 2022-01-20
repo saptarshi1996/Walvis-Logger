@@ -57,8 +57,9 @@ module.exports = {
     async getContainerStatsStream({ commit }, container) {
       try {
 
+        const baseUrl = process.env.SERVER_BASE_URL;
         const sseClientObject = await this._vm.$sse
-        .create(`http://localhost:9099/logger-server/stats/${container.containerId}`)
+        .create(`${baseUrl}/logger-server/stats/${container.containerId}`)
         .on("message", (msg) => {
           
           commit("setContainerStreamStats", msg);
@@ -80,8 +81,9 @@ module.exports = {
     async getContainerLogsStream({ commit }, container) {
       try {
 
+        const baseUrl = process.env.SERVER_BASE_URL;
         const sseClient = await this._vm.$sse
-          .create(`http://localhost:9099/logger-server/stream/${container.containerId}?tail=${container.tail}`)
+          .create(`${baseUrl}/logger-server/stream/${container.containerId}?tail=${container.tail}`)
           .on("message", (msg) => {
 
             commit("setContainerStreamLogs", msg);
