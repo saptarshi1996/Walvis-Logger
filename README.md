@@ -109,7 +109,7 @@ Run the Docker images and map the port to whatever you wish on your host.
 Note: It is mandatory to provide the volume, otherwise the container will not be able to get the logs.
 
 ```sh
-docker compose up --build -d
+bash deploy.bash on
 ```
 
 You can then see the logger working on 
