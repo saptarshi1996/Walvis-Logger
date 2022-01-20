@@ -31,6 +31,18 @@ Walvis requires Node 14.17.3 for the frontend and Python 3.10.0 for the backend
 
 Install the dependencies and devDependencies and start the server.
 
+Create a .env file in the client folder and add the following:
+
+```
+
+PORT=3300
+HOST=0.0.0.0
+BASE_ENDPOINT=/logger
+
+SERVER_BASE_URL=http://localhost:9099
+
+```
+
 ```bash
 
 # install dependencies
@@ -58,12 +70,42 @@ $ npm run generate
 # Flask runs on port 9999
 ```
 
+### Deployment
+
+To deploy walvis production, it is recommended to deploy using nginx. 
+For nginx to pass server side events use the demo config.
+
+```
+location /logger { 
+    proxy_pass http://127.0.0.1:3300;
+    proxy_set_header Connection '';
+    chunked_transfer_encoding off;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Host $host;
+    proxy_cache_bypass $http_upgrade;
+    proxy_buffering off;
+    proxy_cache off;
+
+}
+
+location /logger-server { 
+    proxy_pass http://127.0.0.1:9099;
+    proxy_set_header Connection '';
+    chunked_transfer_encoding off;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Host $host;
+    proxy_cache_bypass $http_upgrade;
+    proxy_buffering off;
+    proxy_cache off;
+}
+```
+
 ## Docker
 
 
-Run the Docker images and map the port to whatever you wish on
-your host.
-
+Run the Docker images and map the port to whatever you wish on your host.
 Note: It is mandatory to provide the volume, otherwise the container will not be able to get the logs.
 
 ```sh
