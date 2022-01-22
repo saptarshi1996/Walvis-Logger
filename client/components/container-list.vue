@@ -66,6 +66,8 @@ export default {
     },
 
     async getLogs(id) {
+      await this.$store.dispatch("triggerStreamLoader", true);
+
       await this.$store.dispatch("triggerMode", "logs");
       await this.$store.dispatch("clearLogs");
 
@@ -79,12 +81,6 @@ export default {
         containerId: id,
         tail: this.tailLimit,
       });
-    },
-
-    async closeContainer(id) {
-      try {
-        await this.sseClient.disconnect();
-      } catch (ex) {}
     },
 
     async clearLogs() {

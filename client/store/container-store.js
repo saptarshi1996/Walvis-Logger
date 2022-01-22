@@ -6,6 +6,7 @@ module.exports = {
     sseClientObject: null,
     sseStatsClientObject: null,
     mode: "logs",
+    streamLoading: false,
   },
 
   getters: {
@@ -38,6 +39,10 @@ module.exports = {
       return state.mode;
     },
 
+    getStreamLoading(state) {
+      return state.streamLoading;
+    },
+
   },
 
   actions: {
@@ -64,12 +69,21 @@ module.exports = {
 
             commit("setContainerStreamStats", msg);
 
+            // close loader here.
+            commit("setTriggerStreamLoader", false);
+
           })
-          .on("error", (err) =>
-            console.error("Failed to parse or lost connection:", err)
-          )
+          .on("error", (err) => {
+            console.error("Failed to parse or lost connection:", err);
+            // close loader here.
+            commit("setTriggerStreamLoader", value);
+          })
           .connect()
-          .catch((err) => console.error("Failed make initial connection:", err));
+          .catch((err) => {
+            console.error("Failed make initial connection:", err);
+            // close loader here.
+            commit("setTriggerStreamLoader", value);
+          });
 
         commit("setSseStatsClientObject", sseClientObject);
 
@@ -87,13 +101,21 @@ module.exports = {
           .on("message", (msg) => {
 
             commit("setContainerStreamLogs", msg);
+            // close loader here.
+            commit("setTriggerStreamLoader", false);
 
           })
-          .on("error", (err) =>
-            console.error("Failed to parse or lost connection:", err)
-          )
+          .on("error", (err) => {
+            console.error("Failed to parse or lost connection:", err);
+            // close loader here.
+            commit("setTriggerStreamLoader", false);
+          })
           .connect()
-          .catch((err) => console.error("Failed make initial connection:", err));
+          .catch((err) => {
+            console.error("Failed make initial connection:", err);
+            // close loader here.
+            commit("setTriggerStreamLoader", false);
+          });
 
         commit("setSseClientObject", sseClient);
 
@@ -108,6 +130,10 @@ module.exports = {
 
     triggerMode({ commit }, mode) {
       commit("setMode", mode);
+    },
+
+    triggerStreamLoader({ commit }, value) {
+      commit("setTriggerStreamLoader", value);
     }
 
   },
@@ -143,6 +169,10 @@ module.exports = {
 
     setMode(state, mode) {
       state.mode = mode;
+    },
+
+    setTriggerStreamLoader(state, value) {
+      state.streamLoading = value;
     },
 
   }

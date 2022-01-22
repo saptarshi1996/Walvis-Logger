@@ -15,7 +15,10 @@
     />
     <v-main>
       <v-row>
-        <v-col cols="12">
+        <v-col cols="12" v-if="loading" class="text-center mt-12">
+          <TabLoader />
+        </v-col>
+        <v-col cols="12" v-else>
           <template v-if="mode === 'logs'">
             <ContainerLogs />
           </template>
@@ -31,6 +34,7 @@
 <script>
 import { mapGetters } from "vuex";
 
+import TabLoader from "../components/tab-loader.vue";
 import ContainerList from "../components/container-list.vue";
 import ContainerLogs from "../components/container-logs.vue";
 import InfiniteLoader from "../components/infinite-loader.vue";
@@ -46,6 +50,7 @@ export default {
     InfiniteLoader,
     ContainerStatsDisplay,
     Options,
+    TabLoader,
   },
 
   async created() {
@@ -55,7 +60,6 @@ export default {
   data() {
     return {
       containerList: [],
-      loading: false,
       containerListLoading: false,
       drawer: false,
       title: "Walvis",
@@ -67,6 +71,7 @@ export default {
     ...mapGetters({
       containerListResponse: "getContainerListResponse",
       mode: "getMode",
+      loading: "getStreamLoading",
     }),
   },
 
