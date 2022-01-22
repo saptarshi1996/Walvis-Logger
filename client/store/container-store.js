@@ -167,6 +167,10 @@ module.exports = {
     },
 
     setTriggerStreamLoader(state, value) {
+      if (value) {
+        state.containerStreamLogs = [];
+        state.containerStreamStats = {};
+      }
       state.streamLoading = value;
     },
 
