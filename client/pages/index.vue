@@ -6,6 +6,10 @@
         @click.stop="$refs.drawer.drawer = !$refs.drawer.drawer"
       ></v-app-bar-nav-icon>
       <v-toolbar-title v-text="title" />
+      <v-spacer></v-spacer>
+      <v-btn left>
+        <v-icon @click.prevent="refreshAllData" dark>mdi-refresh</v-icon>
+      </v-btn>
     </v-app-bar>
     <ContainerList
       :containerList="containerList"
@@ -76,6 +80,8 @@ export default {
       mode: "getMode",
       loading: "getStreamLoading",
       firstLoaded: "getFirstLoaded",
+      logSseClient: "getSseClientObject",
+      statsSseClient: "getSseStatsClientObject",
     }),
   },
 
@@ -90,6 +96,24 @@ export default {
         this.containerListLoading = false;
         console.log(ex.message);
       }
+    },
+
+    async refreshAllData() {
+      try {
+        // disconnect sse clients.
+        await this.logSseClient.disconnect();
+      } catch (ex) {
+        console.log(ex.message);
+      }
+
+      try {
+        await this.statsSseClient.disconnect();
+      } catch (ex) {
+        console.log(ex.message);
+      }
+
+      await this.$store.dispatch("refreshAllData");
+      await this.getContainerList();
     },
   },
 };

@@ -7,8 +7,8 @@
       offset-x
     >
       <template v-slot:activator="{ on, attrs }">
-        <v-btn class="ml-5" small color="primary" dark v-bind="attrs" v-on="on">
-          Options
+        <v-btn class="ml-5" color="primary" dark v-bind="attrs" v-on="on" small>
+          <v-icon dark>mdi-format-list-bulleted</v-icon>
         </v-btn>
       </template>
 

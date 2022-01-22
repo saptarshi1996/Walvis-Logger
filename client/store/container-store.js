@@ -137,6 +137,10 @@ module.exports = {
       commit("setFirstLoaded", value);
     },
 
+    refreshAllData({ commit }) { 
+      commit("setRefreshAllData");
+    },
+
   },
 
   mutations: {
@@ -184,6 +188,14 @@ module.exports = {
 
     setFirstLoaded(state, value) { 
       state.firstLoaded = value;
+    },
+
+    setRefreshAllData(state) { 
+      state.firstLoaded = false;
+      state.containerStreamLogs = [];
+      state.containerStreamStats = {};
+      state.mode = "logs";
+      state.streamLoading = false;
     },
 
   },
