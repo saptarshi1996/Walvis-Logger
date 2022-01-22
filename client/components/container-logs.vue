@@ -6,12 +6,10 @@
         v-for="(log, i) in containerStreamLogs"
         :key="i"
       >
-        <template v-if="log && log.message">
-          <small class="primary--text">
-            <b>{{ log.created_at }}</b>
-          </small>
-          <small class="ml-1">{{ log.message }}</small>
-        </template>
+        <small class="primary--text">
+          <b>{{ log.created_at }}</b>
+        </small>
+        <small class="ml-1">{{ log.message }}</small>
       </div>
     </div>
     <div v-else class="text-center">

@@ -151,11 +151,13 @@ module.exports = {
     },
 
     setContainerStreamLogs(state, value) {
-      state.containerStreamLogs.push({
-        created_at: new Date().toLocaleString(),
-        message: value,
-      });
-      state.streamLoading = false;
+      if (value) {
+        state.containerStreamLogs.push({
+          created_at: new Date().toLocaleString(),
+          message: value,
+        });
+        state.streamLoading = false;
+      }
     },
 
     setClearLogs(state) {
