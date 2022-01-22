@@ -1,17 +1,27 @@
 <template>
-  <v-row>
-    <v-col cols="3">
-      <ContainerList :containerList="containerList" :containerListLoading="containerListLoading" />
-    </v-col>
-    <v-col cols="9">
-      <template v-if="mode === 'logs'">
-        <ContainerLogs />
-      </template>
-      <template v-if="mode === 'stats'">
-        <ContainerStatsDisplay />
-      </template>
-    </v-col>
-  </v-row>
+  <v-app dark>
+    <v-app-bar :clipped-left="clipped" fixed app>
+      <v-app-bar-nav-icon v-if="$mq == 'sm'" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title v-text="title" />
+    </v-app-bar>
+    <ContainerList
+      :containerList="containerList"
+      :containerListLoading="containerListLoading"
+      :drawer="drawer"
+    />
+    <v-main>
+      <v-row>
+        <v-col cols="12">
+          <template v-if="mode === 'logs'">
+            <ContainerLogs />
+          </template>
+          <template v-if="mode === 'stats'">
+            <ContainerStatsDisplay />
+          </template>
+        </v-col>
+      </v-row>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
@@ -24,7 +34,6 @@ import ContainerStatsDisplay from "../components/container-stats-display.vue";
 import Options from "../components/options.vue";
 
 export default {
-
   name: "IndexPage",
 
   components: {
@@ -44,6 +53,9 @@ export default {
       containerList: [],
       loading: false,
       containerListLoading: false,
+      drawer: true,
+      title: "Walvis",
+      clipped: false,
     };
   },
 
@@ -68,6 +80,5 @@ export default {
       }
     },
   },
-
 };
 </script>

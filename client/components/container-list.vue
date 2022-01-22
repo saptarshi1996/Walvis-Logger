@@ -1,6 +1,6 @@
 <template>
-  <v-card class="mx-auto" tile>
-    <v-list flat shaped>
+  <v-navigation-drawer absolute app v-model="drawer">
+    <v-list flat shaped :style="[ $mq=='sm' ? {'margin-top': '20%'} : {'margin-top': '0%'}]">
       <v-subheader>
         CONTAINERS
         <Options
@@ -29,7 +29,7 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
-  </v-card>
+  </v-navigation-drawer>
 </template>
 
 <script>
@@ -43,7 +43,7 @@ export default {
     return {
       selectedItem: null,
       tailSwitch: true,
-      tailLimit: "all",
+      tailLimit: "10",
     };
   },
 
@@ -58,7 +58,7 @@ export default {
     }),
   },
 
-  props: ["containerList", "containerListLoading"],
+  props: ["containerList", "containerListLoading", "drawer"],
 
   methods: {
     selectedTail(value) {

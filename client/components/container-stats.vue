@@ -1,5 +1,5 @@
 <template>
-  <v-btn class="ml-1" @click.prevent="checkStats">Stats</v-btn>
+  <v-btn class="ml-1" @click.prevent="checkStats" small>Stats</v-btn>
 </template>
 
 <script>

@@ -50,6 +50,18 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    [
+      "nuxt-mq",
+      {
+        // Default breakpoint for SSR
+        defaultBreakpoint: "sm",
+        breakpoints: {
+          sm: 600,
+          md: 1250,
+          lg: Infinity
+        }
+      }
+    ],
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
