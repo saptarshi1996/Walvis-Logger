@@ -15,6 +15,9 @@
     />
     <v-main>
       <v-row>
+        <v-col cols="12" v-if="!firstLoaded" class="text-center mt-5">
+          <h2>Select a container to view logs</h2>
+        </v-col>
         <v-col cols="12" v-if="loading" class="text-center mt-12">
           <TabLoader />
         </v-col>
@@ -72,6 +75,7 @@ export default {
       containerListResponse: "getContainerListResponse",
       mode: "getMode",
       loading: "getStreamLoading",
+      firstLoaded: "getFirstLoaded",
     }),
   },
 
@@ -81,7 +85,6 @@ export default {
         this.containerListLoading = true;
         await this.$store.dispatch("getContainerListAction");
         this.containerList = this.containerListResponse;
-        console.log(this.containerList);
         this.containerListLoading = false;
       } catch (ex) {
         this.containerListLoading = false;

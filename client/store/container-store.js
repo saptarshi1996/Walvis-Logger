@@ -7,6 +7,7 @@ module.exports = {
     sseStatsClientObject: null,
     mode: "logs",
     streamLoading: false,
+    firstLoaded: false,
   },
 
   getters: {
@@ -43,6 +44,10 @@ module.exports = {
       return state.streamLoading;
     },
 
+    getFirstLoaded(state) {
+      return state.firstLoaded;
+    },
+
   },
 
   actions: {
@@ -51,7 +56,6 @@ module.exports = {
       try {
 
         const { data } = await this.$axios.get("/logger-server/container_list", registerObject);
-        console.log(data.Response.data);
         commit("setContainerListResponse", data.Response.data);
 
       } catch (ex) {
@@ -127,7 +131,11 @@ module.exports = {
 
     triggerStreamLoader({ commit }, value) {
       commit("setTriggerStreamLoader", value);
-    }
+    },
+
+    triggerFirstLoaded({ commit }, value) {
+      commit("setFirstLoaded", value);
+    },
 
   },
 
@@ -172,6 +180,10 @@ module.exports = {
         state.containerStreamStats = {};
       }
       state.streamLoading = value;
+    },
+
+    setFirstLoaded(state, value) { 
+      state.firstLoaded = value;
     },
 
   },

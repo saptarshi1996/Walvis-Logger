@@ -68,8 +68,9 @@ export default {
 
     async getLogs(id) {
 
-      await this.$store.dispatch("triggerStreamLoader", true);
+      await this.$store.dispatch("triggerFirstLoaded", true);
 
+      await this.$store.dispatch("triggerStreamLoader", true);
       await this.$store.dispatch("triggerMode", "logs");
       await this.$store.dispatch("clearLogs");
 
