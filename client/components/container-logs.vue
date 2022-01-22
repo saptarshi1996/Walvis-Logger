@@ -12,7 +12,7 @@
         <small class="ml-1">{{ log.message }}</small>
       </div>
     </div>
-    <div v-else class="text-center">
+    <div v-if="containerStreamLogs && containerStreamLogs.length === 0" class="text-center">
       <h2>Select a container to view logs</h2>
     </div>
   </v-card>

@@ -72,13 +72,13 @@ module.exports = {
           .on("error", (err) => {
             console.error("Failed to parse or lost connection:", err);
             // close loader here.
-            commit("setTriggerStreamLoader", value);
+            commit("setTriggerStreamLoader", false);
           })
           .connect()
           .catch((err) => {
             console.error("Failed make initial connection:", err);
             // close loader here.
-            commit("setTriggerStreamLoader", value);
+            commit("setTriggerStreamLoader", false);
           });
 
         commit("setSseStatsClientObject", sseClientObject);
@@ -174,5 +174,5 @@ module.exports = {
       state.streamLoading = value;
     },
 
-  }
+  },
 };
