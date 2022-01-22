@@ -66,7 +66,8 @@ module.exports = {
         const sseClientObject = await this._vm.$sse
           .create(`${baseUrl}/logger-server/stats/${container.containerId}`)
           .on("message", (msg) => {
-            commit("setContainerStreamStats", msg);
+            if (msg)
+              commit("setContainerStreamStats", msg);
           })
           .on("error", (err) => {
             console.error("Failed to parse or lost connection:", err);
@@ -94,9 +95,8 @@ module.exports = {
         const sseClient = await this._vm.$sse
           .create(`${baseUrl}/logger-server/stream/${container.containerId}?tail=${container.tail}`)
           .on("message", (msg) => {
-
-            commit("setContainerStreamLogs", msg);
-
+            if (msg)
+              commit("setContainerStreamLogs", msg);
           })
           .on("error", (err) => {
             console.error("Failed to parse or lost connection:", err);
@@ -151,13 +151,11 @@ module.exports = {
     },
 
     setContainerStreamLogs(state, value) {
-      if (value) {
-        state.containerStreamLogs.push({
-          created_at: new Date().toLocaleString(),
-          message: value,
-        });
-        state.streamLoading = false;
-      }
+      state.containerStreamLogs.push({
+        created_at: new Date().toLocaleString(),
+        message: value,
+      });
+      state.streamLoading = false;
     },
 
     setClearLogs(state) {
