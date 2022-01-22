@@ -146,16 +146,16 @@ module.exports = {
     },
 
     setContainerStreamStats(state, value) {
-      state.streamLoading = false;
       state.containerStreamStats = value;
+      state.streamLoading = false;
     },
 
     setContainerStreamLogs(state, value) {
-      state.streamLoading = false;
       state.containerStreamLogs.push({
         created_at: new Date().toLocaleString(),
         message: value,
       });
+      state.streamLoading = false;
     },
 
     setClearLogs(state) {
