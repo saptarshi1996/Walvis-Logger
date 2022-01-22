@@ -26,7 +26,7 @@ module.exports = {
       return state.containerStreamLogs;
     },
 
-    getContainerStreamStats(state) { 
+    getContainerStreamStats(state) {
       try {
         return JSON.parse(state.containerStreamStats);
       } catch (ex) {
@@ -59,17 +59,17 @@ module.exports = {
 
         const baseUrl = process.env.SERVER_BASE_URL;
         const sseClientObject = await this._vm.$sse
-        .create(`${baseUrl}/logger-server/stats/${container.containerId}`)
-        .on("message", (msg) => {
-          
-          commit("setContainerStreamStats", msg);
+          .create(`${baseUrl}/logger-server/stats/${container.containerId}`)
+          .on("message", (msg) => {
 
-        })
-        .on("error", (err) =>
-          console.error("Failed to parse or lost connection:", err)
-        )
-        .connect()
-        .catch((err) => console.error("Failed make initial connection:", err));
+            commit("setContainerStreamStats", msg);
+
+          })
+          .on("error", (err) =>
+            console.error("Failed to parse or lost connection:", err)
+          )
+          .connect()
+          .catch((err) => console.error("Failed make initial connection:", err));
 
         commit("setSseStatsClientObject", sseClientObject);
 
@@ -87,7 +87,7 @@ module.exports = {
           .on("message", (msg) => {
 
             commit("setContainerStreamLogs", msg);
-          
+
           })
           .on("error", (err) =>
             console.error("Failed to parse or lost connection:", err)
@@ -106,7 +106,7 @@ module.exports = {
       commit("setClearLogs");
     },
 
-    triggerMode({ commit }, mode) { 
+    triggerMode({ commit }, mode) {
       commit("setMode", mode);
     }
 
@@ -132,7 +132,7 @@ module.exports = {
 
     setContainerStreamLogs(state, value) {
       state.containerStreamLogs.push({
-        created_at: new Date().toISOString(),
+        created_at: new Date().toLocaleString(),
         message: value,
       });
     },

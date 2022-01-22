@@ -1,6 +1,6 @@
 <template>
-  <v-navigation-drawer absolute app v-model="drawer">
-    <v-list flat shaped :style="[ $mq=='sm' ? {'margin-top': '20%'} : {'margin-top': '0%'}]">
+  <v-navigation-drawer app v-model="drawer">
+    <v-list flat shaped>
       <v-subheader>
         CONTAINERS
         <Options
@@ -33,7 +33,6 @@
 </template>
 
 <script>
-
 import { mapGetters } from "vuex";
 
 import ContainerStats from "./container-stats";
@@ -44,6 +43,7 @@ export default {
       selectedItem: null,
       tailSwitch: true,
       tailLimit: "10",
+      drawer: true,
     };
   },
 
@@ -58,7 +58,7 @@ export default {
     }),
   },
 
-  props: ["containerList", "containerListLoading", "drawer"],
+  props: ["containerList", "containerListLoading"],
 
   methods: {
     selectedTail(value) {

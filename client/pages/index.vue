@@ -1,13 +1,17 @@
 <template>
   <v-app dark>
     <v-app-bar :clipped-left="clipped" fixed app>
-      <v-app-bar-nav-icon v-if="$mq == 'sm'" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon
+        v-if="$mq == 'sm'"
+        @click.stop="$refs.drawer.drawer = !$refs.drawer.drawer"
+      ></v-app-bar-nav-icon>
       <v-toolbar-title v-text="title" />
     </v-app-bar>
     <ContainerList
       :containerList="containerList"
       :containerListLoading="containerListLoading"
       :drawer="drawer"
+      ref="drawer"
     />
     <v-main>
       <v-row>
@@ -53,7 +57,7 @@ export default {
       containerList: [],
       loading: false,
       containerListLoading: false,
-      drawer: true,
+      drawer: false,
       title: "Walvis",
       clipped: false,
     };

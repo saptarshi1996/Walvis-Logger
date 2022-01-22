@@ -1,5 +1,5 @@
 <template>
-  <v-card class="overflow-y-auto mx-auto" style="max-height: 93vh; width: 100%">
+  <v-card class="overflow-y-auto mx-auto" style="width: 100%">
     <div v-if="containerStreamLogs && containerStreamLogs.length > 0">
       <div
         class="text-wrap ma-2"
