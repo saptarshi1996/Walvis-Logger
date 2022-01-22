@@ -28,7 +28,7 @@ services:
         ports:
             - "3300:3300"
 
-        command: bash -c "npm run build && npm run generate && npm run start"
+        command: bash -c "npm run start"
 
         depends_on:
             - walvis_server
