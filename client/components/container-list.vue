@@ -16,8 +16,8 @@
               <h4>{{ item.name }}</h4>
             </v-list-item-title>
             <p class="mt-2">
-              <v-btn @click.prevent="getLogs(item.id)" small>Logs</v-btn>
-              <ContainerStats :item="item" />
+              <v-btn :disabled="loading" @click.prevent="getLogs(item.id)" small>Logs</v-btn>
+              <ContainerStats :loading="loading" :item="item" />
             </p>
           </v-list-item-content>
         </v-list-item>
@@ -55,6 +55,7 @@ export default {
     ...mapGetters({
       containerListResponse: "getContainerListResponse",
       sseClient: "getSseClientObject",
+      loading: "getStreamLoading",
     }),
   },
 
@@ -66,6 +67,7 @@ export default {
     },
 
     async getLogs(id) {
+
       await this.$store.dispatch("triggerStreamLoader", true);
 
       await this.$store.dispatch("triggerMode", "logs");

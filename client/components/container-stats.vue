@@ -1,5 +1,12 @@
 <template>
-  <v-btn class="ml-1" @click.prevent="checkStats" small>Stats</v-btn>
+  <v-btn 
+    class="ml-1" 
+    @click.prevent="checkStats" 
+    small
+    :disabled="loading"
+  >
+    Stats
+  </v-btn>
 </template>
 
 <script>
@@ -13,12 +20,13 @@ export default {
     }),
   },
 
-  props: ["item"],
+  props: ["item", "loading"],
 
   methods: {
 
     async checkStats() {
 
+      await this.$store.dispatch("triggerStreamLoader", true);
       await this.$store.dispatch("triggerMode", "stats");
 
       try {
