@@ -7,16 +7,23 @@
       ></v-app-bar-nav-icon>
       <v-toolbar-title v-text="title" />
       <v-spacer></v-spacer>
-      <v-btn left>
-        <v-icon @click.prevent="refreshAllData" dark>mdi-refresh</v-icon>
+
+      <v-btn icon @click.prevent="refreshAllData">
+        <v-icon dark>mdi-refresh</v-icon>
+      </v-btn>
+      <v-btn icon @click.prevent="openExportExcelModal">
+        <v-icon dark>mdi-file-excel</v-icon>
+      </v-btn>
+      <v-btn icon @click.prevent="openExportJsonModal" class="mr-2">
+        <v-icon dark>mdi-code-json</v-icon>
       </v-btn>
     </v-app-bar>
-    <ContainerList
+    <ContainerDrawer
       :containerList="containerList"
       :containerListLoading="containerListLoading"
-      :drawer="drawer"
       ref="drawer"
     />
+
     <v-main>
       <v-row>
         <v-col cols="12" v-if="!firstLoaded" class="text-center mt-5">
@@ -35,6 +42,12 @@
         </v-col>
       </v-row>
     </v-main>
+
+    <ExportAsExcel
+      ref="excelDialog"
+      :containerSelectList="containerSelectList"
+    />
+    <ExportAsJson ref="jsonDialog" :containerSelectList="containerSelectList" />
   </v-app>
 </template>
 
@@ -42,22 +55,26 @@
 import { mapGetters } from "vuex";
 
 import TabLoader from "../components/tab-loader.vue";
-import ContainerList from "../components/container-list.vue";
-import ContainerLogs from "../components/container-logs.vue";
+import ContainerDrawer from "../components/drawer/container-drawer.vue";
+import ContainerLogs from "../components/display/container-logs.vue";
 import InfiniteLoader from "../components/infinite-loader.vue";
-import ContainerStatsDisplay from "../components/container-stats-display.vue";
-import Options from "../components/options.vue";
+import ContainerStatsDisplay from "../components/display/container-stats-display.vue";
+
+// Modal import
+import ExportAsExcel from "../components/modal/export-as-excel.vue";
+import ExportAsJson from "../components/modal/export-as-json.vue";
 
 export default {
   name: "IndexPage",
 
   components: {
-    ContainerList,
+    ContainerDrawer,
     ContainerLogs,
     InfiniteLoader,
     ContainerStatsDisplay,
-    Options,
     TabLoader,
+    ExportAsExcel,
+    ExportAsJson,
   },
 
   async created() {
@@ -67,8 +84,8 @@ export default {
   data() {
     return {
       containerList: [],
+      containerSelectList: [],
       containerListLoading: false,
-      drawer: false,
       title: "Walvis",
       clipped: false,
     };
@@ -114,6 +131,22 @@ export default {
 
       await this.$store.dispatch("refreshAllData");
       await this.getContainerList();
+    },
+
+    async openExportJsonModal() {
+      if (!this.$refs.jsonDialog.dialog) {
+        await this.$store.dispatch("getContainerListAction");
+        this.containerSelectList = this.containerListResponse;
+      }
+      this.$refs.jsonDialog.dialog = !this.$refs.jsonDialog.dialog;
+    },
+
+    async openExportExcelModal() {
+      if (!this.$refs.excelDialog.dialog) {
+        await this.$store.dispatch("getContainerListAction");
+        this.containerSelectList = this.containerListResponse;
+      }
+      this.$refs.excelDialog.dialog = !this.$refs.excelDialog.dialog;
     },
   },
 };

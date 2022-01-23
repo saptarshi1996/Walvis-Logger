@@ -3,7 +3,7 @@ import time
 from flask import Flask, Response, request, jsonify
 from flask_cors import CORS, cross_origin
 
-from helpers import (docker_helper)
+from helpers import docker_helper
 
 app = Flask(__name__)
 
@@ -72,16 +72,24 @@ def stream_stats(id):
     return Response(status=400)
 
 
-@app.route("/logger-server/close_container/<id>", methods=['GET'])
+@app.route("/logger-server/download-logs/<id>")
 @cross_origin()
-def close_container_by_id(id):
-
-    # close the container by container id
+def download_logs(id):
     try:
-        docker_helper.close_container_by_id(id)
-        return jsonify(StatusCode=200, Response={"message": "Container {0} closed successfully".format(id)}), 200
+
+        format = request.headers.get('format')
+        since, until = request.headers.get('since'), request.headers.get('until')
+
+        # file_object = None
+        # print(format)
+        # if format == 'json':
+        file_object = docker_helper.download_json_logs(id, since, until)
+        # elif format == 'excel':
+        #     file_object = docker_helper.download_excel_logs(id, since, until)
+
+        return jsonify(Response={"data": file_object, "message": "okk"}), 200
     except Exception as e:
-        return jsonify(StatusCode=500, Response={"message": "Internal Server Error"}), 500
+        return jsonify(Response={"message": str(e)}), 500
 
 
 ################################  CONTROLLERS ##########################################

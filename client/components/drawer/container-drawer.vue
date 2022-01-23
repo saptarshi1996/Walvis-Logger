@@ -3,7 +3,7 @@
     <v-list flat shaped>
       <v-subheader>
         CONTAINERS
-        <Options
+        <ContainerOptions
           v-on:selected-tail="selectedTail"
           v-on:trigger-clear-logs="clearLogs"
           :tailSwitch="tailSwitch"
@@ -16,7 +16,9 @@
               <h4>{{ item.name }}</h4>
             </v-list-item-title>
             <p class="mt-2">
-              <v-btn :disabled="loading" @click.prevent="getLogs(item.id)" small>Logs</v-btn>
+              <v-btn :disabled="loading" @click.prevent="getLogs(item.id)" small
+                >Logs</v-btn
+              >
               <ContainerStats :loading="loading" :item="item" />
             </p>
           </v-list-item-content>
@@ -35,6 +37,7 @@
 <script>
 import { mapGetters } from "vuex";
 
+import ContainerOptions from "./container-options";
 import ContainerStats from "./container-stats";
 
 export default {
@@ -49,6 +52,7 @@ export default {
 
   components: {
     ContainerStats,
+    ContainerOptions,
   },
 
   computed: {
@@ -56,6 +60,7 @@ export default {
       containerListResponse: "getContainerListResponse",
       sseClient: "getSseClientObject",
       loading: "getStreamLoading",
+      statsSseClient: "getSseStatsClientObject",
     }),
   },
 
@@ -67,7 +72,6 @@ export default {
     },
 
     async getLogs(id) {
-
       await this.$store.dispatch("triggerFirstLoaded", true);
 
       await this.$store.dispatch("triggerStreamLoader", true);
@@ -87,15 +91,23 @@ export default {
     },
 
     async clearLogs() {
+      // Close both the clients and clear list. but not call container list.
       try {
         await this.sseClient.disconnect();
       } catch (ex) {
         console.log(ex.message);
       }
+
+      try {
+        await this.statsSseClient.disconnect();
+      } catch (ex) {
+        console.log(ex.message);
+      }
+
+      // clear all logs and set first load
       await this.$store.dispatch("clearLogs");
+      await this.$store.dispatch("triggerFirstLoaded", false);
     },
   },
-
-  watch: {},
 };
 </script>

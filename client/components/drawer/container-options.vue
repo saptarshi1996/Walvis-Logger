@@ -43,11 +43,13 @@
 
 <script>
 export default {
-  data: () => ({
-    menu: false,
-    tailItems: ["10", "50", "100", "200", "500"],
-    selectedTailOption: "10",
-  }),
+  data() {
+    return {
+      menu: false,
+      tailItems: ["10", "50", "100", "200", "500"],
+      selectedTailOption: "10",
+    };
+  },
 
   methods: {
     emitTailOptions() {

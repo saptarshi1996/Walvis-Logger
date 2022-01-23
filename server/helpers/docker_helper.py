@@ -1,4 +1,6 @@
+from posixpath import split
 import docker
+import re
 
 
 def get_client():
@@ -34,13 +36,23 @@ def list_containers():
         return []
 
 
-def close_container_by_id(id):
+def split_by_date(log):
+    time, *message_list = log.split(" ")
+    message = " ".join(message_list)
+    if message:
+        return {
+            "time": time,
+            "message": message,
+        }
 
-    """
-        Close any container by the container id.
-    """
 
-    try:
-        get_client().containers.get(id).stop()
-    except Exception as e:
-        raise e
+def download_json_logs(id, since, until):
+    logs = get_client().containers.get(id).logs(timestamps=True)
+    log_list = logs.decode("utf-8").split("\n")
+    log_array = list(map(split_by_date, log_list))
+    log_array = filter(lambda x : x, log_array)
+    return list(log_array)
+
+
+def download_excel_logs():
+    pass

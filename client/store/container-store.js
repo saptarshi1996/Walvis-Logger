@@ -63,6 +63,17 @@ module.exports = {
       }
     },
 
+    async exportContainerLogExport({ commit }, logObject) { 
+      try { 
+
+        const { id, since, until } = logObject;
+        await this.$axios.get(`/logger-server/download-logs/${id}?format=json&since=${since}&until=${until}`);
+
+      } catch (ex) { 
+        console.log(ex.message);
+      }
+    },
+
     async getContainerStatsStream({ commit }, container) {
       try {
 
@@ -137,7 +148,7 @@ module.exports = {
       commit("setFirstLoaded", value);
     },
 
-    refreshAllData({ commit }) { 
+    refreshAllData({ commit }) {
       commit("setRefreshAllData");
     },
 
@@ -172,6 +183,10 @@ module.exports = {
 
     setClearLogs(state) {
       state.containerStreamLogs = [];
+      state.containerStreamLogs = [];
+      state.containerStreamStats = {};
+      state.mode = "logs";
+      state.streamLoading = false;
     },
 
     setMode(state, mode) {
@@ -186,11 +201,11 @@ module.exports = {
       state.streamLoading = value;
     },
 
-    setFirstLoaded(state, value) { 
+    setFirstLoaded(state, value) {
       state.firstLoaded = value;
     },
 
-    setRefreshAllData(state) { 
+    setRefreshAllData(state) {
       state.firstLoaded = false;
       state.containerStreamLogs = [];
       state.containerStreamStats = {};
