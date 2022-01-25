@@ -63,13 +63,13 @@ module.exports = {
       }
     },
 
-    async exportContainerLogExport({ commit }, logObject) { 
-      try { 
+    async exportContainerLogExport({ commit }, logObject) {
+      try {
 
         const { id, since, until } = logObject;
         await this.$axios.get(`/logger-server/download-logs/${id}?format=json&since=${since}&until=${until}`);
 
-      } catch (ex) { 
+      } catch (ex) {
         console.log(ex.message);
       }
     },

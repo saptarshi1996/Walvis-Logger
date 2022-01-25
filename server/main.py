@@ -1,7 +1,9 @@
 import time
+import json
 
-from flask import Flask, Response, request, jsonify
+from flask import Flask, Response, request, jsonify, send_file
 from flask_cors import CORS, cross_origin
+from io import BytesIO, StringIO
 
 from helpers import docker_helper
 
@@ -77,17 +79,18 @@ def stream_stats(id):
 def download_logs(id):
     try:
 
-        format = request.headers.get('format')
-        since, until = request.headers.get('since'), request.headers.get('until')
+        format, file_name = request.args.get('log_format'), request.args.get('file_name')
+        since, until = request.args.get('since'), request.args.get('until')
 
-        # file_object = None
-        # print(format)
-        # if format == 'json':
-        file_object = docker_helper.download_json_logs(id, since, until)
-        # elif format == 'excel':
-        #     file_object = docker_helper.download_excel_logs(id, since, until)
+        if format == 'json':
+            file_object = docker_helper.download_json_logs(id, since, until)
+            buffer = BytesIO()
+            json_string = json.dumps(file_object)
+            buffer.write(bytes(json_string, encoding="utf-8"))
+            buffer.seek(0)
 
-        return jsonify(Response={"data": file_object, "message": "okk"}), 200
+            return send_file(buffer, as_attachment=True, attachment_filename="{0}.json".format(file_name), mimetype="application/json")
+
     except Exception as e:
         return jsonify(Response={"message": str(e)}), 500
 

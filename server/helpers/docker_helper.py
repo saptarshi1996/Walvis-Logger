@@ -47,11 +47,13 @@ def split_by_date(log):
 
 
 def download_json_logs(id, since, until):
-    logs = get_client().containers.get(id).logs(timestamps=True)
+    logs = get_client().containers.get(id).logs(timestamps=True, since=since, until=until)
     log_list = logs.decode("utf-8").split("\n")
     log_array = list(map(split_by_date, log_list))
+    if len(log_array) == 0:
+        return { "logs": [] }
     log_array = filter(lambda x : x, log_array)
-    return list(log_array)
+    return { "logs": list(log_array) }
 
 
 def download_excel_logs():

@@ -13,8 +13,16 @@
             label="Select Container"
           ></v-select>
 
+          <v-text-field
+            name="fileName"
+            label="File Name"
+            v-model="exportAsJsonForm.fileName"
+          />
+
           <v-menu
-            :disabled="!exportAsJsonForm.selectedContainer"
+            :disabled="
+              !exportAsJsonForm.selectedContainer && !exportAsJsonForm.fileName
+            "
             ref="sinceMenu"
             v-model="sinceMenu"
             :close-on-content-click="false"
@@ -45,7 +53,9 @@
           </v-menu>
 
           <v-menu
-            :disabled="!exportAsJsonForm.selectedContainer"
+            :disabled="
+              !exportAsJsonForm.selectedContainer && !exportAsJsonForm.fileName
+            "
             ref="untilMenu"
             v-model="untilMenu"
             :close-on-content-click="false"
@@ -74,7 +84,6 @@
               @click:minute="$refs.untilMenu.save(exportAsJsonForm.until)"
             ></v-time-picker>
           </v-menu>
-
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
@@ -82,16 +91,16 @@
           <v-btn
             color="primary"
             text
-            @click.prevent="dialog = false"
+            @click.prevent="downloadLogsAsJSON"
             :disabled="loadingJsonModal"
-            >Close</v-btn
+            >Download</v-btn
           >
           <v-btn
             color="primary"
             text
-            @click.prevent="downloadLogsAsJSON"
+            @click.prevent="dialog = false"
             :disabled="loadingJsonModal"
-            >Download</v-btn
+            >Close</v-btn
           >
         </v-card-actions>
       </v-card>
@@ -109,6 +118,7 @@ export default {
         selectedContainer: null,
         since: null,
         until: null,
+        fileName: "",
       },
       dialog: false,
       sinceMenu: false,
@@ -122,38 +132,61 @@ export default {
   methods: {
     async downloadLogsAsJSON() {
       try {
-
         this.loadingJsonModal = true;
 
-        console.log(this.exportAsJsonForm.selectedContainer);
-
-        if (this.exportAsJsonForm && this.exportAsJsonForm.selectedContainer) {
-
+        if (
+          this.exportAsJsonForm &&
+          this.exportAsJsonForm.selectedContainer &&
+          this.exportAsJsonForm.fileName
+        ) {
           if (this.exportAsJsonForm.since && this.exportAsJsonForm.until) {
+            const sinceTimeStamp = dateHelper.calculateDateTimeFromTime(
+              this.exportAsJsonForm.since
+            );
+            const untilTimeStamp = dateHelper.calculateDateTimeFromTime(
+              this.exportAsJsonForm.until
+            );
 
-            const sinceTimeStamp = dateHelper.calculateDateTimeFromTime(this.exportAsJsonForm.since);
-            const untilTimeStamp = dateHelper.calculateDateTimeFromTime(this.exportAsJsonForm.until);
-
-            if (untilTimeStamp < sinceTimeStamp) { 
-              console.log("After cannot be greater than From.");
+            if (untilTimeStamp < sinceTimeStamp) {
               this.loadingJsonModal = false;
               return;
             }
 
-            await this.$store.dispatch("exportContainerLogExport", {
-              id: this.exportAsJsonForm.selectedContainer,
-              since: sinceTimeStamp,
-              until: untilTimeStamp,
-            });
-          
+            const id = this.exportAsJsonForm.selectedContainer;
+            const since = sinceTimeStamp;
+            const until = untilTimeStamp;
+            const fileName = this.exportAsJsonForm.fileName;
+            const dataType = "json";
+
+            // open this tag in a new window to download the file
+            const baseUrl = process.env.SERVER_BASE_URL;
+            window.open(
+              `${baseUrl}/logger-server/download-logs/${id}?log_format=${dataType}&since=${since}&until=${until}&file_name=${fileName}`
+            );
           }
         }
 
         this.loadingJsonModal = false;
-
       } catch (ex) {
         console.log(ex.message);
         this.loadingJsonModal = false;
+      }
+    },
+
+    clearForm() {
+      this.exportAsJsonForm = {
+        selectedContainer: null,
+        since: null,
+        until: null,
+        fileName: "",
+      };
+    },
+  },
+
+  watch: {
+    dialog(value) {
+      if (!value) {
+        this.clearForm();
       }
     },
   },
