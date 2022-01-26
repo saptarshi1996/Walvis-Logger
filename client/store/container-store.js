@@ -174,11 +174,16 @@ module.exports = {
     },
 
     setContainerStreamLogs(state, value) {
+
+      const log = JSON.parse(value);
+
       state.containerStreamLogs.push({
-        created_at: new Date().toLocaleString(),
-        message: value,
+        created_at: new Date(log.timestamp).toLocaleString(),
+        message: log.message,
       });
+
       state.streamLoading = false;
+
     },
 
     setClearLogs(state) {

@@ -2,7 +2,7 @@
   <div class="text-center">
     <v-dialog persistent v-model="dialog" width="500">
       <v-card>
-        <v-card-title class="text-h5"> Export as json </v-card-title>
+        <v-card-title class="text-h5"> Export as JSON </v-card-title>
         <v-card-text>
           <v-select
             :disabled="loadingJsonModal"

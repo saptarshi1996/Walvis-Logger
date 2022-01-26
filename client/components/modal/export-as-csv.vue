@@ -2,7 +2,7 @@
   <div class="text-center">
     <v-dialog persistent v-model="dialog" width="500">
       <v-card>
-        <v-card-title class="text-h5"> Export as csv </v-card-title>
+        <v-card-title class="text-h5"> Export as CSV </v-card-title>
         <v-card-text>
           <v-select
             :disabled="loadingCsvModal"
@@ -91,7 +91,7 @@
           <v-btn
             color="primary"
             text
-            @click.prevent="downloadLogsAsJSON"
+            @click.prevent="downloadLogsAsCSV"
             :disabled="loadingCsvModal"
             >Download</v-btn
           >
@@ -130,7 +130,7 @@ export default {
   props: ["containerSelectList"],
 
   methods: {
-    async downloadLogsAsJSON() {
+    async downloadLogsAsCSV() {
       try {
         this.loadingCsvModal = true;
 

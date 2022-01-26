@@ -43,15 +43,15 @@
       </v-row>
     </v-main>
 
-    <ExportAsCsv
-      ref="csvDialog"
-      :containerSelectList="containerSelectList"
-    />
+    <!-- Export Modal -->
+    <ExportAsCsv ref="csvDialog" :containerSelectList="containerSelectList"/>
     <ExportAsJson ref="jsonDialog" :containerSelectList="containerSelectList" />
+
   </v-app>
 </template>
 
 <script>
+
 import { mapGetters } from "vuex";
 
 import TabLoader from "../components/tab-loader.vue";

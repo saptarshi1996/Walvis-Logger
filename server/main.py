@@ -36,12 +36,19 @@ def stream_logs(id):
         def events():
 
             container = docker_helper.get_client().containers.get(id)
-            target = container.logs(stream=True, follow=True, tail=tail)
+            target = container.logs(stream=True, follow=True, tail=tail, timestamps=True)
 
             try:
                 while True:
+
                     line = next(target)
-                    yield "data: %s\n\n" % (line.decode("utf-8"))
+                    
+                    timestamp, *message_list = line.decode("utf-8").split(" ")
+                    message = " ".join(message_list)
+
+                    log = { "timestamp": timestamp, "message": message }
+
+                    yield "data: %s\n\n" % (json.dumps(log))
                     time.sleep(0.1)  # an artificial delay
             except StopIteration:
                 print("Logger stopped")
@@ -91,7 +98,7 @@ def download_logs(id):
             buffer.write(bytes(json_string, encoding="utf-8"))
             buffer.seek(0)
 
-            return send_file(buffer, as_attachment=True, attachment_filename="{0}.json".format(file_name), mimetype="application/json")
+            return send_file(buffer, as_attachment=True, attachment_filename="{0}.json".format(file_name.replace(" ", "")), mimetype="application/json")
 
         if format == 'csv':
 
