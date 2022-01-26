@@ -2,11 +2,11 @@
   <div class="text-center">
     <v-dialog persistent v-model="dialog" width="500">
       <v-card>
-        <v-card-title class="text-h5"> Export as json </v-card-title>
+        <v-card-title class="text-h5"> Export as csv </v-card-title>
         <v-card-text>
           <v-select
-            :disabled="loadingJsonModal"
-            v-model="exportAsJsonForm.selectedContainer"
+            :disabled="loadingCsvModal"
+            v-model="exportAsCsvForm.selectedContainer"
             item-text="name"
             item-value="id"
             :items="containerSelectList"
@@ -16,18 +16,18 @@
           <v-text-field
             name="fileName"
             label="File Name"
-            v-model="exportAsJsonForm.fileName"
+            v-model="exportAsCsvForm.fileName"
           />
 
           <!-- <v-menu
             :disabled="
-              !exportAsJsonForm.selectedContainer && !exportAsJsonForm.fileName
+              !exportAsCsvForm.selectedContainer && !exportAsCsvForm.fileName
             "
             ref="sinceMenu"
             v-model="sinceMenu"
             :close-on-content-click="false"
             :nudge-right="40"
-            :return-value.sync="exportAsJsonForm.since"
+            :return-value.sync="exportAsCsvForm.since"
             transition="scale-transition"
             offset-y
             max-width="290px"
@@ -35,7 +35,7 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
-                v-model="exportAsJsonForm.since"
+                v-model="exportAsCsvForm.since"
                 label="From time"
                 prepend-icon="mdi-clock-time-four-outline"
                 readonly
@@ -45,22 +45,22 @@
             </template>
             <v-time-picker
               v-if="sinceMenu"
-              v-model="exportAsJsonForm.since"
+              v-model="exportAsCsvForm.since"
               full-width
               format="24hr"
-              @click:minute="$refs.sinceMenu.save(exportAsJsonForm.since)"
+              @click:minute="$refs.sinceMenu.save(exportAsCsvForm.since)"
             ></v-time-picker>
           </v-menu>
 
           <v-menu
             :disabled="
-              !exportAsJsonForm.selectedContainer && !exportAsJsonForm.fileName
+              !exportAsCsvForm.selectedContainer && !exportAsCsvForm.fileName
             "
             ref="untilMenu"
             v-model="untilMenu"
             :close-on-content-click="false"
             :nudge-right="40"
-            :return-value.sync="exportAsJsonForm.until"
+            :return-value.sync="exportAsCsvForm.until"
             transition="scale-transition"
             offset-y
             max-width="290px"
@@ -68,7 +68,7 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
-                v-model="exportAsJsonForm.until"
+                v-model="exportAsCsvForm.until"
                 label="Until time"
                 prepend-icon="mdi-clock-time-four-outline"
                 readonly
@@ -78,10 +78,10 @@
             </template>
             <v-time-picker
               v-if="untilMenu"
-              v-model="exportAsJsonForm.until"
+              v-model="exportAsCsvForm.until"
               full-width
               format="24hr"
-              @click:minute="$refs.untilMenu.save(exportAsJsonForm.until)"
+              @click:minute="$refs.untilMenu.save(exportAsCsvForm.until)"
             ></v-time-picker>
           </v-menu> -->
         </v-card-text>
@@ -92,14 +92,14 @@
             color="primary"
             text
             @click.prevent="downloadLogsAsJSON"
-            :disabled="loadingJsonModal"
+            :disabled="loadingCsvModal"
             >Download</v-btn
           >
           <v-btn
             color="primary"
             text
             @click.prevent="dialog = false"
-            :disabled="loadingJsonModal"
+            :disabled="loadingCsvModal"
             >Close</v-btn
           >
         </v-card-actions>
@@ -114,7 +114,7 @@ import dateHelper from "../../helpers/date-helper";
 export default {
   data() {
     return {
-      exportAsJsonForm: {
+      exportAsCsvForm: {
         selectedContainer: null,
         // since: null,
         // until: null,
@@ -123,7 +123,7 @@ export default {
       dialog: false,
       sinceMenu: false,
       untilMenu: false,
-      loadingJsonModal: false,
+      loadingCsvModal: false,
     };
   },
 
@@ -132,48 +132,32 @@ export default {
   methods: {
     async downloadLogsAsJSON() {
       try {
-        this.loadingJsonModal = true;
+        this.loadingCsvModal = true;
 
         if (
-          this.exportAsJsonForm &&
-          this.exportAsJsonForm.selectedContainer &&
-          this.exportAsJsonForm.fileName
+          this.exportAsCsvForm &&
+          this.exportAsCsvForm.selectedContainer &&
+          this.exportAsCsvForm.fileName
         ) {
-          // if (this.exportAsJsonForm.since && this.exportAsJsonForm.until) {
-          //   const sinceTimeStamp = dateHelper.calculateDateTimeFromTime(
-          //     this.exportAsJsonForm.since
-          //   );
-          //   const untilTimeStamp = dateHelper.calculateDateTimeFromTime(
-          //     this.exportAsJsonForm.until
-          //   );
 
-          //   if (untilTimeStamp < sinceTimeStamp) {
-          //     this.loadingJsonModal = false;
-          //     return;
-          //   }
-
-            const id = this.exportAsJsonForm.selectedContainer;
-            // const since = sinceTimeStamp;
-            // const until = untilTimeStamp;
-            const fileName = this.exportAsJsonForm.fileName;
-            const dataType = "json";
+            const id = this.exportAsCsvForm.selectedContainer;
+            const fileName = this.exportAsCsvForm.fileName;
+            const dataType = "csv";
 
             // open this tag in a new window to download the file
             const baseUrl = process.env.SERVER_BASE_URL;
-            window.open(
-              `${baseUrl}/logger-server/download-logs/${id}?log_format=${dataType}&file_name=${fileName}`);
-        //   }
+            window.open(`${baseUrl}/logger-server/download-logs/${id}?log_format=${dataType}&file_name=${fileName}`);
         }
 
-        this.loadingJsonModal = false;
+        this.loadingCsvModal = false;
       } catch (ex) {
         console.log(ex.message);
-        this.loadingJsonModal = false;
+        this.loadingCsvModal = false;
       }
     },
 
     clearForm() {
-      this.exportAsJsonForm = {
+      this.exportAsCsvForm = {
         selectedContainer: null,
         // since: null,
         // until: null,

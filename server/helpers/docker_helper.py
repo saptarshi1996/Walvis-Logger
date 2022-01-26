@@ -1,6 +1,5 @@
 from posixpath import split
 import docker
-import re
 
 
 def get_client():
@@ -37,24 +36,42 @@ def list_containers():
 
 
 def split_by_date(log):
+
+    """[summary]
+    Split time and messge of docker container by date.
+
+    Returns:
+        [type]: [description]
+    """
+
     time, *message_list = log.split(" ")
     message = " ".join(message_list)
     if message:
+
+        date, time = time.split('T')
+        date_time = date+" "+time[0:8]
+
         return {
-            "time": time,
+            "timestamp": date_time,
             "message": message,
         }
 
 
-def download_json_logs(id, since, until):
-    logs = get_client().containers.get(id).logs(timestamps=True, since=since, until=until)
+def download_logs(id):
+
+    """[summary]
+    Download docker logs and convert them to json or list
+
+    Returns:
+        [type]: [description]
+    """
+
+    logs = get_client().containers.get(id).logs(timestamps=True) 
     log_list = logs.decode("utf-8").split("\n")
     log_array = list(map(split_by_date, log_list))
+
     if len(log_array) == 0:
         return { "logs": [] }
+    
     log_array = filter(lambda x : x, log_array)
     return { "logs": list(log_array) }
-
-
-def download_excel_logs():
-    pass

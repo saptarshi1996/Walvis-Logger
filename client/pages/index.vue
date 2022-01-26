@@ -11,7 +11,7 @@
       <v-btn icon @click.prevent="refreshAllData">
         <v-icon dark>mdi-refresh</v-icon>
       </v-btn>
-      <v-btn icon @click.prevent="openExportExcelModal">
+      <v-btn icon @click.prevent="openExportCsvModal">
         <v-icon dark>mdi-file-excel</v-icon>
       </v-btn>
       <v-btn icon @click.prevent="openExportJsonModal" class="mr-2">
@@ -43,8 +43,8 @@
       </v-row>
     </v-main>
 
-    <ExportAsExcel
-      ref="excelDialog"
+    <ExportAsCsv
+      ref="csvDialog"
       :containerSelectList="containerSelectList"
     />
     <ExportAsJson ref="jsonDialog" :containerSelectList="containerSelectList" />
@@ -61,7 +61,7 @@ import InfiniteLoader from "../components/infinite-loader.vue";
 import ContainerStatsDisplay from "../components/display/container-stats-display.vue";
 
 // Modal import
-import ExportAsExcel from "../components/modal/export-as-excel.vue";
+import ExportAsCsv from "../components/modal/export-as-csv.vue";
 import ExportAsJson from "../components/modal/export-as-json.vue";
 
 export default {
@@ -73,7 +73,7 @@ export default {
     InfiniteLoader,
     ContainerStatsDisplay,
     TabLoader,
-    ExportAsExcel,
+    ExportAsCsv,
     ExportAsJson,
   },
 
@@ -141,12 +141,12 @@ export default {
       this.$refs.jsonDialog.dialog = !this.$refs.jsonDialog.dialog;
     },
 
-    async openExportExcelModal() {
-      if (!this.$refs.excelDialog.dialog) {
+    async openExportCsvModal() {
+      if (!this.$refs.csvDialog.dialog) {
         await this.$store.dispatch("getContainerListAction");
         this.containerSelectList = this.containerListResponse;
       }
-      this.$refs.excelDialog.dialog = !this.$refs.excelDialog.dialog;
+      this.$refs.csvDialog.dialog = !this.$refs.csvDialog.dialog;
     },
   },
 };

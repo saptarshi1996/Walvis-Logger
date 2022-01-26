@@ -1,5 +1,6 @@
 import time
 import json
+import csv
 
 from flask import Flask, Response, request, jsonify, send_file
 from flask_cors import CORS, cross_origin
@@ -80,10 +81,11 @@ def download_logs(id):
     try:
 
         format, file_name = request.args.get('log_format'), request.args.get('file_name')
-        since, until = request.args.get('since'), request.args.get('until')
 
         if format == 'json':
-            file_object = docker_helper.download_json_logs(id, since, until)
+
+            file_object = docker_helper.download_logs(id)
+
             buffer = BytesIO()
             json_string = json.dumps(file_object)
             buffer.write(bytes(json_string, encoding="utf-8"))
@@ -91,7 +93,28 @@ def download_logs(id):
 
             return send_file(buffer, as_attachment=True, attachment_filename="{0}.json".format(file_name), mimetype="application/json")
 
+        if format == 'csv':
+
+            file_object = docker_helper.download_logs(id)
+            string_buffer = StringIO()
+
+            logs = file_object['logs']
+            log_list = [[log['timestamp'], log['message']] for log in logs]
+
+            writer = csv.writer(string_buffer)
+            writer.writerows(log_list)
+
+            buffer = BytesIO()
+            buffer.write(string_buffer.getvalue().encode("utf-8"))
+            buffer.seek(0)
+
+            string_buffer.close()
+
+            # send file to user end
+            return send_file(buffer, as_attachment=True, attachment_filename="{0}.csv".format(file_name.replace(" ", "")), mimetype="text/csv")
+
     except Exception as e:
+        print(e)
         return jsonify(Response={"message": str(e)}), 500
 
 
