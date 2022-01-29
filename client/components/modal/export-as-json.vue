@@ -12,7 +12,6 @@
             :items="containerSelectList"
             label="Select Container"
           ></v-select>
-
           <v-text-field
             name="fileName"
             label="File Name"

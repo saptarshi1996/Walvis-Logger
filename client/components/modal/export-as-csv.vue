@@ -42,15 +42,12 @@
 </template>
 
 <script>
-import dateHelper from "../../helpers/date-helper";
 
 export default {
   data() {
     return {
       exportAsCsvForm: {
         selectedContainer: null,
-        // since: null,
-        // until: null,
         fileName: "",
       },
       dialog: false,
