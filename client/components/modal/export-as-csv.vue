@@ -12,78 +12,11 @@
             :items="containerSelectList"
             label="Select Container"
           ></v-select>
-
           <v-text-field
             name="fileName"
             label="File Name"
             v-model="exportAsCsvForm.fileName"
           />
-
-          <!-- <v-menu
-            :disabled="
-              !exportAsCsvForm.selectedContainer && !exportAsCsvForm.fileName
-            "
-            ref="sinceMenu"
-            v-model="sinceMenu"
-            :close-on-content-click="false"
-            :nudge-right="40"
-            :return-value.sync="exportAsCsvForm.since"
-            transition="scale-transition"
-            offset-y
-            max-width="290px"
-            min-width="290px"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field
-                v-model="exportAsCsvForm.since"
-                label="From time"
-                prepend-icon="mdi-clock-time-four-outline"
-                readonly
-                v-bind="attrs"
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-time-picker
-              v-if="sinceMenu"
-              v-model="exportAsCsvForm.since"
-              full-width
-              format="24hr"
-              @click:minute="$refs.sinceMenu.save(exportAsCsvForm.since)"
-            ></v-time-picker>
-          </v-menu>
-
-          <v-menu
-            :disabled="
-              !exportAsCsvForm.selectedContainer && !exportAsCsvForm.fileName
-            "
-            ref="untilMenu"
-            v-model="untilMenu"
-            :close-on-content-click="false"
-            :nudge-right="40"
-            :return-value.sync="exportAsCsvForm.until"
-            transition="scale-transition"
-            offset-y
-            max-width="290px"
-            min-width="290px"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field
-                v-model="exportAsCsvForm.until"
-                label="Until time"
-                prepend-icon="mdi-clock-time-four-outline"
-                readonly
-                v-bind="attrs"
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-time-picker
-              v-if="untilMenu"
-              v-model="exportAsCsvForm.until"
-              full-width
-              format="24hr"
-              @click:minute="$refs.untilMenu.save(exportAsCsvForm.until)"
-            ></v-time-picker>
-          </v-menu> -->
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
@@ -159,8 +92,6 @@ export default {
     clearForm() {
       this.exportAsCsvForm = {
         selectedContainer: null,
-        // since: null,
-        // until: null,
         fileName: "",
       };
     },
