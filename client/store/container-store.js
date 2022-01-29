@@ -191,7 +191,7 @@ module.exports = {
       state.containerStreamLogs = [];
       state.containerStreamStats = {};
       state.mode = "logs";
-      state.streamLoading = false;
+      // state.streamLoading = false;
     },
 
     setMode(state, mode) {
