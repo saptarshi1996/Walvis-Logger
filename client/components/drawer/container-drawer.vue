@@ -73,9 +73,10 @@ export default {
 
     filterContainerList() {
       if (!this.containerName) return this.containerList;
-      return this.containerList.filter(container => container.name.includes(this.containerName));
+      return this.containerList.filter((container) =>
+        container.name.includes(this.containerName)
+      );
     },
-
   },
 
   props: ["containerList", "containerListLoading", "getContainerList"],
