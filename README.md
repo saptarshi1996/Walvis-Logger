@@ -6,6 +6,7 @@ Walvis is a small lightweight application with a web based interface to monitor 
 
 ## Features
 
+- Search for containers.
 - Get all your running containers list.
 - Realtime docker container logs with date and time.
 - Support for tail and all logs.
