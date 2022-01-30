@@ -17,7 +17,7 @@
           placeholder="Container Name"
         ></v-text-field>
 
-        <v-list-item v-for="(item, i) in containerList" :key="i">
+        <v-list-item v-for="(item, i) in filterContainerList" :key="i">
           <v-list-item-content>
             <v-list-item-title>
               <h4>{{ item.name }}</h4>
@@ -70,6 +70,12 @@ export default {
       loading: "getStreamLoading",
       statsSseClient: "getSseStatsClientObject",
     }),
+
+    filterContainerList() {
+      if (!this.containerName) return this.containerList;
+      return this.containerList.filter(container => container.name.includes(this.containerName));
+    },
+
   },
 
   props: ["containerList", "containerListLoading", "getContainerList"],
@@ -115,14 +121,6 @@ export default {
       // clear all logs and set first load
       await this.$store.dispatch("clearLogs");
       await this.$store.dispatch("triggerFirstLoaded", false);
-    },
-  },
-
-  watch: {
-    async containerName(value) {
-      value
-        ? await this.getContainerList(value)
-        : await this.getContainerList();
     },
   },
 };

@@ -104,12 +104,10 @@ export default {
   },
 
   methods: {
-    async getContainerList(name) {
+    async getContainerList() {
       try {
         this.containerListLoading = true;
-        await this.$store.dispatch("getContainerListAction", {
-          name,
-        });
+        await this.$store.dispatch("getContainerListAction");
         this.containerList = this.containerListResponse;
         this.containerListLoading = false;
       } catch (ex) {

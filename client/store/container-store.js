@@ -52,17 +52,10 @@ module.exports = {
 
   actions: {
 
-    async getContainerListAction({ commit }, name) {
+    async getContainerListAction({ commit }) {
       try {
-
-
         const { data } = await this.$axios.get("/logger-server/container_list");
-
-        if (name && name.name)
-          data.Response.data = data.Response.data.filter(res => res.name.includes(name.name));
-
         commit("setContainerListResponse", data.Response.data);
-
       } catch (ex) {
         console.log(ex.message);
       }
