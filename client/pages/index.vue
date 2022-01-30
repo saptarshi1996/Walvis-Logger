@@ -21,6 +21,7 @@
     <ContainerDrawer
       :containerList="containerList"
       :containerListLoading="containerListLoading"
+      :getContainerList="getContainerList"
       ref="drawer"
     />
 
@@ -103,10 +104,12 @@ export default {
   },
 
   methods: {
-    async getContainerList() {
+    async getContainerList(name) {
       try {
         this.containerListLoading = true;
-        await this.$store.dispatch("getContainerListAction");
+        await this.$store.dispatch("getContainerListAction", {
+          name,
+        });
         this.containerList = this.containerListResponse;
         this.containerListLoading = false;
       } catch (ex) {
