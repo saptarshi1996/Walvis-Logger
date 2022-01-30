@@ -11,7 +11,7 @@
       </v-subheader>
       <v-list-item-group v-model="selectedItem">
         <v-text-field
-          hide-details 
+          hide-details
           class="m-2 pl-3 pb-1"
           v-model="containerName"
           placeholder="Container Name"
@@ -54,7 +54,7 @@ export default {
       tailSwitch: true,
       tailLimit: "10",
       drawer: true,
-      containerName: '',
+      containerName: "",
     };
   },
 
@@ -119,17 +119,11 @@ export default {
   },
 
   watch: {
-
     async containerName(value) {
-
-      if (!value) {
-        await this.getContainerList();
-      }
-
-      if (value)
-        await this.getContainerList(value);
+      value
+        ? await this.getContainerList(value)
+        : await this.getContainerList();
     },
-
-  }
+  },
 };
 </script>
