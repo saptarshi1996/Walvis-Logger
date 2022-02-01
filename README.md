@@ -68,7 +68,7 @@ $ npm run dev
 $ npm run build
 $ npm run generate
 
-# Flask runs on port 9999
+# Flask runs on port 9099
 ```
 
 ### Deployment
