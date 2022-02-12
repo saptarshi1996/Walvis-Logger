@@ -34,13 +34,31 @@ Install the dependencies and devDependencies and start the server.
 
 Create a .env file in the client folder and add the following:
 
-```
+```bash
 
 PORT=3300
 HOST=0.0.0.0
 BASE_ENDPOINT=/logger
 
 SERVER_BASE_URL=http://localhost:9099
+
+```
+
+Then create a .env file in the server folder and add the following:
+
+```bash
+
+PORT=9099
+HOST=localhost
+
+FLASK_ENV=development
+FLASK_DEBUG=1
+
+JWT_SECRET_KEY=wrtbrrg5gdrgrgrd
+
+USER_NAME=admin
+PASSWORD=123456
+
 
 ```
 
