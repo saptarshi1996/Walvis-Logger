@@ -13,7 +13,7 @@
       <v-btn icon @click.prevent="openExportCsvModal">
         <v-icon dark>mdi-file-excel</v-icon>
       </v-btn>
-      <v-btn icon @click.prevent="openExportJsonModal" class="mr-2">
+      <v-btn icon @click.prevent="openExportJsonModal">
         <v-icon dark>mdi-code-json</v-icon>
       </v-btn>
       <v-btn icon @click.prevent="$auth.logout()" class="mr-2">
