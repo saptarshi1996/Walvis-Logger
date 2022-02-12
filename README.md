@@ -54,7 +54,7 @@ HOST=localhost
 FLASK_ENV=development
 FLASK_DEBUG=1
 
-JWT_SECRET_KEY=wrtbrrg5gdrgrgrd
+JWT_SECRET_KEY=any-secret
 
 USER_NAME=admin
 PASSWORD=123456
