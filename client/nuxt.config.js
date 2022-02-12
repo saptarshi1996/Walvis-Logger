@@ -33,6 +33,10 @@ export default {
       src: "./plugins/vue-sse",
       ssr: false,
     },
+    {
+      src: "./plugins/vue-mobile-message",
+      ssr: false,
+    },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -46,10 +50,9 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    '@nuxtjs/auth',
     [
       "nuxt-mq",
       {
@@ -95,10 +98,6 @@ export default {
       }
     }
   },
-  
-  // env: {
-  //   BASE_URL: process.env.BASE_URL,
-  // },
 
   router: {
     base: process.env.BASE_ENDPOINT,
@@ -108,8 +107,30 @@ export default {
   build: {
   },
 
-  env: { 
+  env: {
     ENVIRONMENT: process.env.ENVIRONMENT,
     SERVER_BASE_URL: process.env.SERVER_BASE_URL,
-  }
+  },
+
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            url: "logger-server/auth/login",
+            method: "post",
+            propertyName: "access_token",
+          },
+          logout: false,
+          user: false,
+        },
+        tokenRequired: true,
+        tokenType: "Bearer",
+      },
+    },
+    redirect: {
+      login: "/login",
+      logout: "/login",
+    },
+  },
 }

@@ -2,21 +2,52 @@ import time
 import json
 import csv
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
 from flask import Flask, Response, request, jsonify, send_file
 from flask_cors import CORS, cross_origin
 from io import BytesIO, StringIO
 
+from flask_jwt_extended import (
+    create_access_token,
+    jwt_required,
+    JWTManager,
+)
+
 from helpers import docker_helper
+from config import constant
 
 app = Flask(__name__)
 
+app.config["JWT_SECRET_KEY"] = constant.JWT_SECRET_KEY
+jwt = JWTManager(app)
 cors = CORS(app)
 
 ################################  CONTROLLERS ##########################################
 
 
+@app.route("/logger-server/auth/login", methods=["POST"])
+@cross_origin()
+def login():
+    try:
+        username = request.json.get("username", None)
+        password = request.json.get("password", None)
+
+        if username != constant.USER or password != constant.PASSWORD:
+            return jsonify({"msg": "Invalid username or password"}), 401
+
+        access_token = create_access_token(identity=username)
+        return jsonify(access_token=access_token), 200
+    except Exception as e:
+        return jsonify({"msg": str(e)}), 500
+
+
 @app.route("/logger-server/container_list", methods=["GET"])
 @cross_origin()
+@jwt_required()
 def get_container_list():
     container_list = docker_helper.list_containers()
     return jsonify(Response={"data": container_list}), 200
@@ -142,6 +173,7 @@ def download_logs(id):
 
 ################################  CONTROLLERS ##########################################
 
+print(constant.USER, constant.PASSWORD)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=9099)
+    app.run(host=constant.HOST, port=constant.PORT)

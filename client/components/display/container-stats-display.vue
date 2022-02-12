@@ -1,5 +1,6 @@
 <template>
   <div>
+    <v-card class="mx-auto mt-5"> </v-card>
     <v-card class="mt-5">
       <v-card-text>
         <h3>Last read at {{ new Date(containerStreamStats.read) }}</h3>
@@ -54,7 +55,8 @@ export default {
     bytesToSize(bytes) {
       const units = ["bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
-      let l = 0, n = parseInt(bytes, 10) || 0;
+      let l = 0,
+        n = parseInt(bytes, 10) || 0;
 
       while (n >= 1024 && ++l) {
         n = n / 1024;

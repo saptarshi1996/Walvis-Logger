@@ -2,7 +2,6 @@
   <v-app dark>
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon
-        v-if="$mq == 'sm'"
         @click.stop="$refs.drawer.drawer = !$refs.drawer.drawer"
       ></v-app-bar-nav-icon>
       <v-toolbar-title v-text="title" />
@@ -16,6 +15,9 @@
       </v-btn>
       <v-btn icon @click.prevent="openExportJsonModal" class="mr-2">
         <v-icon dark>mdi-code-json</v-icon>
+      </v-btn>
+      <v-btn icon @click.prevent="$auth.logout()" class="mr-2">
+        <v-icon dark>mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
     <ContainerDrawer
@@ -45,14 +47,12 @@
     </v-main>
 
     <!-- Export Modal -->
-    <ExportAsCsv ref="csvDialog" :containerSelectList="containerSelectList"/>
+    <ExportAsCsv ref="csvDialog" :containerSelectList="containerSelectList" />
     <ExportAsJson ref="jsonDialog" :containerSelectList="containerSelectList" />
-
   </v-app>
 </template>
 
 <script>
-
 import { mapGetters } from "vuex";
 
 import TabLoader from "../components/tab-loader.vue";

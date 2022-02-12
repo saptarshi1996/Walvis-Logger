@@ -48,12 +48,14 @@ import ContainerOptions from "./container-options";
 import ContainerStats from "./container-stats";
 
 export default {
+  created() {},
+
   data() {
     return {
       selectedItem: null,
       tailSwitch: true,
       tailLimit: "10",
-      drawer: true,
+      drawer: false,
       containerName: "",
     };
   },
