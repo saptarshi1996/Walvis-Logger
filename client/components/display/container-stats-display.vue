@@ -3,6 +3,16 @@
     <v-card class="mx-auto mt-5"> </v-card>
     <v-card class="mt-5">
       <v-card-text>
+        <p>
+          <v-btn color="primary" @click.prevent="restartContainer"
+            >Restart</v-btn
+          >
+          <v-btn color="primary" class="ml-2">Stop</v-btn>
+        </p>
+      </v-card-text>
+    </v-card>
+    <v-card class="mt-5">
+      <v-card-text>
         <h3>Last read at {{ new Date(containerStreamStats.read) }}</h3>
       </v-card-text>
     </v-card>
@@ -63,6 +73,16 @@ export default {
       }
 
       return n.toFixed(n < 10 && l > 0 ? 1 : 0) + " " + units[l];
+    },
+
+    async restartContainer() {
+      this.$loading.show("loading...");
+
+      await this.$store.dispatch(
+        "restartContainer",
+        this.containerStreamStats.id
+      );
+      this.$loading.hide("loading...");
     },
   },
 };

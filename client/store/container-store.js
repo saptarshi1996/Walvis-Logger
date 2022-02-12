@@ -101,6 +101,16 @@ module.exports = {
       }
     },
 
+    async restartContainer({ commit }, id) {
+      try {
+
+        await this.$axios.get(`/logger-server/container_restart/${id}`);
+
+      } catch (ex) {
+        console.log(ex.message);
+      }
+    },
+
     async getContainerLogsStream({ commit }, container) {
       try {
 

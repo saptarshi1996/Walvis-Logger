@@ -37,12 +37,12 @@ def login():
         password = request.json.get("password", None)
 
         if username != constant.USER or password != constant.PASSWORD:
-            return jsonify({"msg": "Invalid username or password"}), 401
+            return jsonify({"message": "Invalid username or password"}), 401
 
         access_token = create_access_token(identity=username)
         return jsonify(access_token=access_token), 200
     except Exception as e:
-        return jsonify({"msg": str(e)}), 500
+        return jsonify({"message": str(e)}), 500
 
 
 @app.route("/logger-server/container_list", methods=["GET"])
@@ -51,6 +51,16 @@ def login():
 def get_container_list():
     container_list = docker_helper.list_containers()
     return jsonify(Response={"data": container_list}), 200
+
+
+@app.route("/logger-server/container_restart/<id>")
+@cross_origin()
+def container_restart(id):
+    try:
+        docker_helper.get_client().containers.get(id).restart()
+        return jsonify({"message": "Container restarted successfully"}), 200
+    except Exception as e:
+        return jsonify({"message": str(e)}), 500
 
 
 @app.route("/logger-server/stream/<id>")

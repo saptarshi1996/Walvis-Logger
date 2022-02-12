@@ -60,7 +60,7 @@ export default {
         if (ex.response) {
           this.$alert({
             htmlSupport: true,
-            content: `<div>${ex.response.data.msg}</div>`,
+            content: `<div>${ex.response.data.message}</div>`,
             title: `<div>Message</div>`,
             btn: {
               text: "Ok",
