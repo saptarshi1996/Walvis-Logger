@@ -132,5 +132,6 @@ export default {
       login: "/login",
       logout: "/login",
     },
+    autoLogout: true, // logout automatically on token expire
   },
 }
