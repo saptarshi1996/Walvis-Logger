@@ -40,7 +40,7 @@
             <ContainerLogs />
           </template>
           <template v-if="mode === 'stats'">
-            <ContainerStatsDisplay />
+            <ContainerStatsDisplay v-on:restart-container="restartContainer" />
           </template>
         </v-col>
       </v-row>
@@ -148,6 +148,45 @@ export default {
         this.containerSelectList = this.containerListResponse;
       }
       this.$refs.csvDialog.dialog = !this.$refs.csvDialog.dialog;
+    },
+
+    async logoutUser() {
+      // close all sse connections. then logout
+      // Close both the sse clients.
+      try {
+        await this.logSseClient.disconnect();
+      } catch (ex) {
+        console.log(ex.message);
+      }
+
+      try {
+        await this.statsSseClient.disconnect();
+      } catch (ex) {
+        console.log(ex.message);
+      }
+      await this.$auth.logout();
+    },
+
+    async restartContainer(id) {
+      this.$loading.show("loading...");
+      await this.$store.dispatch("restartContainer", id);
+
+      // Close both the sse clients.
+      try {
+        await this.logSseClient.disconnect();
+      } catch (ex) {
+        console.log(ex.message);
+      }
+
+      try {
+        await this.statsSseClient.disconnect();
+      } catch (ex) {
+        console.log(ex.message);
+      }
+
+      await this.$store.dispatch("refreshAllData");
+      await this.getContainerList();
+      this.$loading.hide("loading...");
     },
   },
 };

@@ -1,26 +1,11 @@
 <template>
   <div>
     <v-card class="mx-auto mt-5"> </v-card>
-    <v-card class="mt-5">
-      <v-card-text>
-        <p>
-          <v-btn color="primary" @click.prevent="restartContainer"
-            >Restart</v-btn
-          >
-          <v-btn color="primary" class="ml-2">Stop</v-btn>
-        </p>
-      </v-card-text>
-    </v-card>
-    <v-card class="mt-5">
-      <v-card-text>
-        <h3>Last read at {{ new Date(containerStreamStats.read) }}</h3>
-      </v-card-text>
-    </v-card>
     <v-card class="mx-auto mt-5">
       <v-card-title>Container details</v-card-title>
       <v-card-text>
         <h3>Name: {{ containerStreamStats.name }}</h3>
-        <h4>PID: {{ containerStreamStats.id }}</h4>
+        <h3>PID: {{ containerStreamStats.id }}</h3>
       </v-card-text>
     </v-card>
     <v-card class="mx-auto mt-5">
@@ -46,6 +31,27 @@
         <h3>
           Limit: {{ bytesToSize(containerStreamStats.memory_stats.limit) }}
         </h3>
+      </v-card-text>
+    </v-card>
+    <v-card class="mx-auto mt-5">
+      <v-card-title>Uptime</v-card-title>
+      <v-card-text>
+        <h3>Last read at {{ new Date(containerStreamStats.read) }}</h3>
+        <h3>
+          Started: {{ displayCreatedAt(containerStreamStats.started_at) }}
+        </h3>
+      </v-card-text>
+    </v-card>
+    <v-card class="mx-auto mt-5">
+      <v-card-text>
+        <p>
+          <v-btn
+            color="primary"
+            @click.prevent="$emit('restart-container', containerStreamStats.id)"
+            >Restart</v-btn
+          >
+          <v-btn color="primary" class="ml-2">Stop</v-btn>
+        </p>
       </v-card-text>
     </v-card>
   </div>
@@ -75,14 +81,20 @@ export default {
       return n.toFixed(n < 10 && l > 0 ? 1 : 0) + " " + units[l];
     },
 
-    async restartContainer() {
-      this.$loading.show("loading...");
-
-      await this.$store.dispatch(
-        "restartContainer",
-        this.containerStreamStats.id
-      );
-      this.$loading.hide("loading...");
+    displayCreatedAt(date) {
+      const currentDate = new Date(date);
+      const startedDate = new Date();
+      // find the difference between the dates of these two
+      const timeDifference = currentDate.getTime() - startedDate.getTime();
+      const dayDifference = timeDifference / (1000 * 3600 * 24);
+      const absoluteDay = +Math.abs(dayDifference);
+      if (absoluteDay < 1 && absoluteDay > 0) {
+        return "Today";
+      } else if (absoluteDay >= 1 && absoluteDay < 2) {
+        return "Yesterday";
+      } else {
+        return absoluteDay;
+      }
     },
   },
 };

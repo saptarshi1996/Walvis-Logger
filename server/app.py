@@ -1,11 +1,12 @@
+from datetime import timedelta
 import time
 import json
 import csv
 
 from dotenv import load_dotenv
 
+# loading env variables.
 load_dotenv()
-
 
 from flask import Flask, Response, request, jsonify, send_file
 from flask_cors import CORS, cross_origin
@@ -39,7 +40,11 @@ def login():
         if username != constant.USER or password != constant.PASSWORD:
             return jsonify({"message": "Invalid username or password"}), 401
 
-        access_token = create_access_token(identity=username)
+        # create an access token that will expire after 7 days.
+        access_token = create_access_token(
+            identity=username, expires_delta=timedelta(days=7)
+        )
+
         return jsonify(access_token=access_token), 200
     except Exception as e:
         return jsonify({"message": str(e)}), 500
@@ -116,7 +121,12 @@ def stream_stats(id):
             try:
                 while True:
                     line = next(streams)
-                    yield "data: %s\n\n" % (line.decode("utf-8"))
+                    line = line.decode("utf-8")
+                    started_at = container.attrs["State"]["StartedAt"]
+                    line = json.loads(line)
+                    line["started_at"] = started_at
+                    line = json.dumps(line)
+                    yield "data: %s\n\n" % (line)
                     time.sleep(0.1)  # an artificial delay
             except StopIteration:
                 print("Logger stopped")
@@ -182,8 +192,6 @@ def download_logs(id):
 
 
 ################################  CONTROLLERS ##########################################
-
-print(constant.USER, constant.PASSWORD)
 
 if __name__ == "__main__":
     app.run(host=constant.HOST, port=constant.PORT)
