@@ -1,8 +1,8 @@
-from datetime import timedelta
 import time
 import json
 import csv
 
+from datetime import timedelta
 from dotenv import load_dotenv
 
 # loading env variables.
