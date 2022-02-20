@@ -4,6 +4,7 @@ if [ "$1" == "on" ]; then
     docker-compose up --build -d
 
     # Remove dangling container
+    # shellcheck disable=SC2046
     docker rmi $(docker images -f "dangling=true" -q)
 
 elif [ "$1" == "off" ]; then

@@ -5,6 +5,8 @@ services:
     walvis_server:
         working_dir: "/app"
 
+        restart: always
+
         ports:
             - "9099:9099"
 
@@ -23,6 +25,8 @@ services:
     walvis_client:
 
         working_dir: "/app"
+
+        restart: always
 
         build:
             context: ./client
