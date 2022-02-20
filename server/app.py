@@ -1,13 +1,3 @@
-import time
-import json
-import csv
-
-from datetime import timedelta
-from dotenv import load_dotenv
-
-# loading env variables.
-load_dotenv()
-
 from flask import Flask, Response, request, jsonify, send_file
 from flask_cors import CORS, cross_origin
 from io import BytesIO, StringIO
@@ -20,6 +10,17 @@ from flask_jwt_extended import (
 
 from helpers import docker_helper
 from config import constant
+
+import time
+import json
+import csv
+
+from datetime import timedelta
+from dotenv import load_dotenv
+
+# loading env variables.
+load_dotenv()
+
 
 app = Flask(__name__)
 
