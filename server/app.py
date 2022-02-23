@@ -28,10 +28,13 @@ app.config["JWT_SECRET_KEY"] = constant.JWT_SECRET_KEY
 jwt = JWTManager(app)
 cors = CORS(app)
 
+
+BASE_URL = constant.BASE_URL
+
 ################################  CONTROLLERS ##########################################
 
 
-@app.route("/logger-server/auth/login", methods=["POST"])
+@app.route("{0}auth/login".format(BASE_URL), methods=["POST"])
 @cross_origin()
 def login():
     try:
@@ -51,7 +54,7 @@ def login():
         return jsonify({"message": str(e)}), 500
 
 
-@app.route("/logger-server/container_list", methods=["GET"])
+@app.route("{0}container_list".format(BASE_URL), methods=["GET"])
 @cross_origin()
 @jwt_required()
 def get_container_list():
@@ -59,7 +62,7 @@ def get_container_list():
     return jsonify(Response={"data": container_list}), 200
 
 
-@app.route("/logger-server/container_restart/<id>")
+@app.route("{0}container_restart/<id>".format(BASE_URL))
 @cross_origin()
 def container_restart(id):
     try:
@@ -69,7 +72,7 @@ def container_restart(id):
         return jsonify({"message": str(e)}), 500
 
 
-@app.route("/logger-server/stream/<id>")
+@app.route("{0}stream/<id>".format(BASE_URL))
 @cross_origin()
 def stream_logs(id):
 
@@ -108,7 +111,7 @@ def stream_logs(id):
     return Response(status=400)
 
 
-@app.route("/logger-server/stats/<id>")
+@app.route("{0}stats/<id>".format(BASE_URL))
 @cross_origin()
 def stream_stats(id):
 
@@ -137,7 +140,7 @@ def stream_stats(id):
     return Response(status=400)
 
 
-@app.route("/logger-server/download-logs/<id>")
+@app.route("{0}download-logs/<id>".format(BASE_URL))
 @cross_origin()
 def download_logs(id):
     try:
