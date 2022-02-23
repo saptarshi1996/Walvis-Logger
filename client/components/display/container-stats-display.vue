@@ -50,7 +50,7 @@
             @click.prevent="$emit('restart-container', containerStreamStats.id)"
             >Restart</v-btn
           >
-          <v-btn color="primary" class="ml-2">Stop</v-btn>
+          <!-- <v-btn color="primary" class="ml-2">Stop</v-btn> -->
         </p>
       </v-card-text>
     </v-card>
