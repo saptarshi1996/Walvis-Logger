@@ -18,3 +18,8 @@ env
 
 .idea
 .vscode
+
+build/
+
+client/node_modules
+client/.env

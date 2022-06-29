@@ -1,8 +1,0 @@
-node_modules/
-walvis/
-.nuxt/
-dist/
-
-__pycache__
-
-static/sw.js
