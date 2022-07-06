@@ -14,6 +14,8 @@ RUN cd ./client && npm install && cd ..
 
 COPY . ./
 
+RUN rm -f -r ../build && cd client && npm run build && mv build ../ && cd ..
+
 EXPOSE 8000
 
 CMD ["bash", "entrypoint.bash"]
