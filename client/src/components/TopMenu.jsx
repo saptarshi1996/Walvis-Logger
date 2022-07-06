@@ -2,9 +2,15 @@ import { Menu, Layout } from 'antd';
 
 const { Header } = Layout;
 
-export default function TopMenu({
-  topMenuItems,
-}) {
+export default function TopMenu () {
+
+  const topMenuItems = [
+    {
+      key: '/',
+      label: 'Logs',
+    }
+  ];
+
   return (
     <>
       <Header

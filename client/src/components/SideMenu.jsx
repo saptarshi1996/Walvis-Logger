@@ -1,36 +1,41 @@
-import { Layout, Menu, Divider, Typography } from 'antd';
+import React from 'react';
+import { Layout, Menu, Typography, Spin } from 'antd';
 
-const {
-  Title,
-} = Typography;
+const { Title } = Typography;
+const { Sider } = Layout;
 
-const {
-  Sider,
-} = Layout;
-
-export default function SideMenu({
-  containers,
+export default function SideMenu ({
+  containerList,
+  isContainerListLoading,
+  setSelectedContainer,
 }) {
+
+  const ShowSpin = () => {
+    return (
+      <>
+        <Spin style={{ "marginLeft": "25%" }} size="large" />
+      </>
+    );
+  };
+
   return (
     <>
       <Sider>
         <Title style={
           {
             marginLeft: "10%",
-            marginTop: "5%",
+            marginTop: "25%",
             color: "#fff",
           }
         } level={4}>
           Containers
         </Title>
-        <Divider />
-        <Menu
+        {isContainerListLoading ? <><ShowSpin /></> : <Menu
           theme="dark"
-          defaultSelectedKeys={['1']}
           mode="inline"
-          items={containers}
-          onClick={(e) => { console.log(e); }}
-        />
+          items={containerList}
+          onClick={(e) => setSelectedContainer(e.key)}
+        />}
       </Sider>
     </>
   );

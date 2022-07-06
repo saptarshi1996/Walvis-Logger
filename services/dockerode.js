@@ -3,13 +3,19 @@ const docker = new Docker();
 
 exports.docker = docker;
 
-exports.getAllContainers = () => new Promise((resolve, reject) => {
+exports.getAllContainers = () => new Promise(async (resolve, reject) => {
   try {
-    resolve(docker.listContainers({
+    const containerList = await docker.listContainers({
       filters: {
         status: ['running'],
       }
-    }));
+    });
+
+    resolve(containerList.map(container => ({
+      key: container.Id,
+      label: container.Image,
+    })))
+
   } catch (ex) {
     reject({
       message: ex.message,

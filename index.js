@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const stream = require('stream');
+const cors = require('cors');
 
 const app = express();
 const http = require('http').createServer(app);
@@ -20,6 +21,7 @@ const dockerService = require('./services/dockerode');
 const { HOST, PORT } = process.env;
 
 app.use(express.static("build"));
+app.use(cors());
 
 // Render webpage after build.
 app.get("/", (req, res) => {
@@ -61,7 +63,6 @@ const streamLogs = async ({
 
   const logStream = new stream.PassThrough();
   logStream.on('data', function (chunk) {
-    console.log('stream');
     const data = chunk.toString('utf8');
     io.to(socketId).emit('sendLogs', data);
   });

@@ -13,6 +13,6 @@ RUN cd ./client && npm install && cd ..
 
 COPY . ./
 
-EXPOSE 8000
+EXPOSE 7080
 
 CMD ["bash", "entrypoint.bash"]
