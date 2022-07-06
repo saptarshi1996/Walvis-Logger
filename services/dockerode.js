@@ -1,12 +1,44 @@
 const Docker = require('dockerode');
 const docker = new Docker();
 
-const getAllContainers = () => new Promise((resolve, reject) => {
-  return docker.listContainers();
+exports.docker = docker;
+
+exports.getAllContainers = () => new Promise((resolve, reject) => {
+  try {
+    resolve(docker.listContainers());
+  } catch (ex) {
+    reject({
+      message: ex.message,
+    });
+  }
 });
 
-const getContainerDetails = ({
+exports.getContainerDetails = ({
   id,
 }) => new Promise((resolve, reject) => {
+  try {
+    resolve(docker.getContainer(id));
+  } catch (ex) {
+    reject({
+      message: ex.message,
+    });
+  }
+});
 
+exports.getContainerLogs = ({
+  containerId,
+  since,
+  until,
+}) => new Promise((resolve, reject) => {
+  try {
+    resolve(docker.getContainer(id).logs({
+      id: containerId,
+      since,
+      until,
+    }));
+  } catch (ex) {
+    reject({
+      message: ex.message,
+    });
+  }
 });
