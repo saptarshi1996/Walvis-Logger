@@ -3,6 +3,7 @@ FROM node:15.14.0
 WORKDIR /app
 
 COPY package*.json ./
+
 RUN npm install
 
 RUN mkdir -p ./client
@@ -13,6 +14,6 @@ RUN cd ./client && npm install && cd ..
 
 COPY . ./
 
-EXPOSE 7080
+EXPOSE 8000
 
 CMD ["bash", "entrypoint.bash"]
