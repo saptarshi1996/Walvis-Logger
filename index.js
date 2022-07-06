@@ -14,6 +14,8 @@ const io = require('socket.io', {
 })(http);
 
 const authRoutes = require('./routes/auth');
+const containerRoutes = require('./routes/container');
+
 const dockerService = require('./services/dockerode');
 const { HOST, PORT } = process.env;
 
@@ -25,6 +27,7 @@ app.get("/", (req, res) => {
 });
 
 app.use('/auth', authRoutes);
+app.use('/container', containerRoutes);
 
 http.listen(PORT, HOST, () => console.log('Server on PORT', PORT));
 

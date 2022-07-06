@@ -5,7 +5,11 @@ exports.docker = docker;
 
 exports.getAllContainers = () => new Promise((resolve, reject) => {
   try {
-    resolve(docker.listContainers());
+    resolve(docker.listContainers({
+      filters: {
+        status: ['running'],
+      }
+    }));
   } catch (ex) {
     reject({
       message: ex.message,
@@ -15,9 +19,10 @@ exports.getAllContainers = () => new Promise((resolve, reject) => {
 
 exports.getContainerDetails = ({
   id,
-}) => new Promise((resolve, reject) => {
+}) => new Promise(async (resolve, reject) => {
   try {
-    resolve(docker.getContainer(id));
+    const container = await docker.getContainer(id);
+    resolve(container);
   } catch (ex) {
     reject({
       message: ex.message,
