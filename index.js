@@ -17,15 +17,15 @@ const io = require('socket.io', {
 const authRoutes = require('./routes/auth');
 const containerRoutes = require('./routes/container');
 
-const dockerService = require('./services/dockerode');
+const { docker } = require('./services/dockerode');
 const { HOST, PORT } = process.env;
 
-app.use(express.static("build"));
+app.use(express.static("dist"));
 app.use(cors());
 
 // Render webpage after build.
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 
 app.use('/auth', authRoutes);
@@ -38,12 +38,10 @@ io.on('connection', socket => {
   socket.on('fetchLogs', async data => {
     const payload = JSON.parse(data);
     const socketId = socket.id;
-    console.log(payload);
-    console.log(socketId);
     streamLogs({
       socketId,
       containerId: payload.containerId,
-    })
+    });
   });
 
   socket.on('disconnect', reason => {
@@ -56,33 +54,30 @@ const streamLogs = async ({
   socketId,
   containerId,
 }) => {
-
-  const container = await dockerService.getContainerDetails({
-    id: containerId,
-  });
-
-  const logStream = new stream.PassThrough();
-  logStream.on('data', function (chunk) {
-    const data = chunk.toString('utf8');
-    io.to(socketId).emit('sendLogs', data);
-  });
-
-  container.logs({
-    follow: true,
-    stdout: true,
-    stderr: true
-  }, function (err, stream) {
-    if (err) {
-      console.log(err);
-    }
-    container.modem.demuxStream(stream, logStream, logStream);
-    stream.on('end', function () {
-      logStream.end('!stop!');
+  try {
+    const container = await docker.getContainer(containerId);
+    const logStream = new stream.PassThrough();
+    logStream.on('data', function (chunk) {
+      const data = chunk.toString('utf8');
+      io.to(socketId).emit('sendLogs', data);
     });
 
-    setTimeout(function () {
-      stream.destroy();
-    }, 500);
-  });
-
+    container.attach({
+      logs: true,
+      stream: true,
+      stdout: true,
+      stderr: false,
+      tty: false,
+    }, function (err, stream) {
+      if (err)
+        logStream.end('!stop!');
+      container.modem.demuxStream(stream, logStream, logStream);
+      stream.on('end', function () {
+        logStream.end('!stop!');
+      });
+    });
+  } catch (ex) {
+    console.log(ex);
+    io.to(socketId).emit('closed');
+  }
 };
