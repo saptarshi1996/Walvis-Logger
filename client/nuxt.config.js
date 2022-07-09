@@ -1,17 +1,20 @@
+require('dotenv').config()
+
 import colors from 'vuetify/es5/util/colors'
-import { config } from "dotenv";
-config();
 
 export default {
-
-  target: "server",
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
+  // Target: https://go.nuxtjs.dev/config-target
+  target: 'static',
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s',
-    title: 'Walvis',
+    titleTemplate: 'Walvis Logger',
+    htmlAttrs: {
+      lang: 'en'
+    },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -29,14 +32,6 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    {
-      src: "./plugins/vue-sse",
-      ssr: false,
-    },
-    {
-      src: "./plugins/vue-mobile-message",
-      ssr: false,
-    },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -50,34 +45,14 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    '@nuxtjs/pwa',
-    '@nuxtjs/auth',
-    [
-      "nuxt-mq",
-      {
-        // Default breakpoint for SSR
-        defaultBreakpoint: "sm",
-        breakpoints: {
-          sm: 600,
-          md: 1250,
-          lg: Infinity
-        }
-      }
-    ],
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: process.env.SERVER_BASE_URL,
-  },
-
-  // PWA module configuration: https://go.nuxtjs.dev/pwa
-  pwa: {
-    manifest: {
-      lang: 'en'
-    }
+    baseURL: process.env.BASE_URL,
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
@@ -99,39 +74,11 @@ export default {
     }
   },
 
-  router: {
-    base: process.env.BASE_ENDPOINT,
-  },
-
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   },
 
   env: {
-    ENVIRONMENT: process.env.ENVIRONMENT,
-    SERVER_BASE_URL: process.env.SERVER_BASE_URL,
-  },
-
-  auth: {
-    strategies: {
-      local: {
-        endpoints: {
-          login: {
-            url: "logger-server/auth/login",
-            method: "post",
-            propertyName: "access_token",
-          },
-          logout: false,
-          user: false,
-        },
-        tokenRequired: true,
-        tokenType: "Bearer",
-      },
-    },
-    redirect: {
-      login: "/login",
-      logout: "/login",
-    },
-    autoLogout: true, // logout automatically on token expire
-  },
+    BASE_URL: process.env.BASE_URL,
+  }
 }
