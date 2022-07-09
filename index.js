@@ -33,11 +33,14 @@ app.use('/container', containerRoutes);
 
 http.listen(PORT, HOST, () => console.log('Server on PORT', PORT));
 
+let socketStream = {};
+
 io.on('connection', socket => {
 
   socket.on('fetchLogs', async data => {
     const payload = JSON.parse(data);
     const socketId = socket.id;
+
     streamLogs({
       socketId,
       containerId: payload.containerId,
@@ -45,7 +48,10 @@ io.on('connection', socket => {
   });
 
   socket.on('disconnect', reason => {
-    console.log(reason)
+    if (socketStream && socketStream[socket.id]) {
+      socketStream[socket.id].destroy();
+    }
+    console.log(reason);
   });
 
 });
@@ -54,21 +60,33 @@ const streamLogs = async ({
   socketId,
   containerId,
 }) => {
+
+  const logStream = new stream.PassThrough();
+
   try {
     const container = await docker.getContainer(containerId);
-    const logStream = new stream.PassThrough();
     logStream.on('data', function (chunk) {
       const data = chunk.toString('utf8');
-      io.to(socketId).emit('sendLogs', data);
+      const [date, time] = new Date().toISOString().split('T');
+      io.to(socketId).emit('sendLogs', JSON.stringify({
+        log: data,
+        timeStamp: `${date} ${time.substring(0, 8)}`,
+      }));
     });
 
-    container.attach({
-      logs: true,
-      stream: true,
+    container.logs({
+      follow: true,
       stdout: true,
-      stderr: false,
-      tty: false,
+      stderr: true,
+      tail: 1
     }, function (err, stream) {
+
+      // close previous stream.
+      if (socketStream && socketStream[socketId]) {
+        socketStream[socketId].destroy();
+      }
+      socketStream[socketId] = stream;
+
       if (err)
         logStream.end('!stop!');
       container.modem.demuxStream(stream, logStream, logStream);
@@ -78,6 +96,7 @@ const streamLogs = async ({
     });
   } catch (ex) {
     console.log(ex);
-    io.to(socketId).emit('closed');
+    // io.to(socketId).emit('closed');
+    logStream.end('!stop!');
   }
 };

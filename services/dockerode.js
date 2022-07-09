@@ -12,8 +12,8 @@ exports.getAllContainers = () => new Promise(async (resolve, reject) => {
     });
 
     resolve(containerList.map(container => ({
-      key: container.Id,
-      label: container.Image,
+      id: container.Id,
+      name: container.Image,
     })))
 
   } catch (ex) {
