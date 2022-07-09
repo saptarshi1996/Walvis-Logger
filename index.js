@@ -35,7 +35,7 @@ http.listen(PORT, HOST, () => console.log('Server on PORT', PORT));
 
 let socketStream = {};
 
-io.on('connection', socket => {
+io.on('connection', async socket => {
 
   socket.on('fetchLogs', async data => {
     const payload = JSON.parse(data);
@@ -49,7 +49,7 @@ io.on('connection', socket => {
 
   socket.on('disconnect', reason => {
     if (socketStream && socketStream[socket.id]) {
-      socketStream[socket.id].destroy();
+      await socketStream[socket.id].destroy();
     }
     console.log(reason);
   });
@@ -79,11 +79,11 @@ const streamLogs = async ({
       stdout: true,
       stderr: true,
       tail: 1
-    }, function (err, stream) {
+    }, async (err, stream) => {
 
       // close previous stream.
       if (socketStream && socketStream[socketId]) {
-        socketStream[socketId].destroy();
+        await socketStream[socketId].destroy();
       }
       socketStream[socketId] = stream;
 
