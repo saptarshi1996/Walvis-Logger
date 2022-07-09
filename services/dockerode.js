@@ -17,9 +17,7 @@ exports.getAllContainers = () => new Promise(async (resolve, reject) => {
     })))
 
   } catch (ex) {
-    reject({
-      message: ex.message,
-    });
+    reject({ message: ex.message });
   }
 });
 
@@ -30,9 +28,7 @@ exports.getContainerDetails = ({
     const container = await docker.getContainer(id);
     resolve(container);
   } catch (ex) {
-    reject({
-      message: ex.message,
-    });
+    reject({ message: ex.message });
   }
 });
 
@@ -48,8 +44,6 @@ exports.getContainerLogs = ({
       until,
     }));
   } catch (ex) {
-    reject({
-      message: ex.message,
-    });
+    reject({ message: ex.message });
   }
 });

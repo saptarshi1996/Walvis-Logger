@@ -35,7 +35,7 @@ http.listen(PORT, HOST, () => console.log('Server on PORT', PORT));
 
 let socketStream = {};
 
-io.on('connection', async socket => {
+io.on('connection', socket => {
 
   socket.on('fetchLogs', async data => {
     const payload = JSON.parse(data);
@@ -47,8 +47,9 @@ io.on('connection', async socket => {
     });
   });
 
-  socket.on('disconnect', reason => {
+  socket.on('disconnect', async reason => {
     if (socketStream && socketStream[socket.id]) {
+      console.log('kill old stream');
       await socketStream[socket.id].destroy();
     }
     console.log(reason);
@@ -71,6 +72,7 @@ const streamLogs = async ({
       io.to(socketId).emit('sendLogs', JSON.stringify({
         log: data,
         timeStamp: `${date} ${time.substring(0, 8)}`,
+        containerId,
       }));
     });
 
@@ -83,20 +85,26 @@ const streamLogs = async ({
 
       // close previous stream.
       if (socketStream && socketStream[socketId]) {
+        console.log('kill old stream');
         await socketStream[socketId].destroy();
       }
       socketStream[socketId] = stream;
 
-      if (err)
-        logStream.end('!stop!');
+      if (err) {
+        logStream.end('!!!!!stop!!!!!');
+        stream.destroy();
+      }
+
       container.modem.demuxStream(stream, logStream, logStream);
       stream.on('end', function () {
-        logStream.end('!stop!');
+        logStream.end('!!!!!stop!!!!!');
+        stream.destroy();
       });
+      
     });
+
   } catch (ex) {
     console.log(ex);
-    // io.to(socketId).emit('closed');
     logStream.end('!stop!');
   }
 };

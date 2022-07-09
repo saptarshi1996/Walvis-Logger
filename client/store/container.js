@@ -2,6 +2,7 @@ module.exports = {
   state: {
     logs: [],
     containers: [],
+    loadingLogs: false,
   },
 
   getters: {
@@ -10,6 +11,9 @@ module.exports = {
     },
     getAddLogs(state) {
       return state.logs;
+    },
+    getLoadingLogs(state) {
+      return state.loadingLogs;
     },
   },
 
@@ -34,6 +38,10 @@ module.exports = {
       }
     },
 
+    async startLoadingLogs({ commit }) {
+      commit('setStartLoadingLogs');
+    },
+
     async addLogs({ commit }, data) {
       commit('setAddLogs', data);
     },
@@ -46,11 +54,26 @@ module.exports = {
     },
     
     setAddLogs(state, value) {
-      state.logs.push(value);
+
+      if (state.logs.length === 0) {
+        console.log('stop loader false');
+        state.loadingLogs = false;
+      }
+
+      if (value && value.log === '!!!!!stop!!!!!') {
+        state.containers = state.containers.filter(container => container.id !== value.containerId);
+        state.logs = [];
+      } else {
+        state.logs.push(value);
+      }
     },
 
     setClearAllLogs(state) {
       state.logs = [];
-    }
+    },
+
+    setStartLoadingLogs(state) {
+      state.loadingLogs = true;
+    },
   }
 };

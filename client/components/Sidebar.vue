@@ -9,8 +9,8 @@
     <v-divider></v-divider>
     <v-list nav dense>
       <v-list-item-group>
-        <v-list-item v-for="(container, i) of containerList" :key="i">
-          <v-list-item-title @click.prevent="getContainerLogs(container)">
+        <v-list-item v-for="(container, i) of containerList" :key="i" @click="getContainerLogs(container)">
+          <v-list-item-title>
             {{ container.name }}
           </v-list-item-title>
         </v-list-item>
@@ -24,15 +24,21 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "Sidebar",
-  props: ["drawer", "socketObject"],
+  props: ["socketObject"],
 
   async created() {
     await this.$store.dispatch("listContainerAction");
-    console.log(this.containerList);
+  },
+
+  data() {
+    return {
+      drawer: true,
+    };
   },
 
   computed: {
     ...mapGetters({
+      loadingLogs: 'getLoadingLogs',
       containerList: "getContainerList",
     }),
   },
@@ -40,6 +46,7 @@ export default {
   methods: {
     async getContainerLogs(container) {
       await this.$store.dispatch('clearAllLogs');
+      await this.$store.dispatch('startLoadingLogs');
       this.socketObject.emit(
         "fetchLogs",
         JSON.stringify({

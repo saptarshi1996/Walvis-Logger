@@ -1,10 +1,11 @@
 <template>
   <v-app dark>
-    <Sidebar :socketObject="socketObject" :drawer="drawer" />
+    <!-- <Snackbar :snackbar="true" :timeout="2000" :text="'Container was closed'" /> -->
+    <Sidebar :socketObject="socketObject" />
     <v-main>
       <NuxtChild :socketObject="socketObject" />
     </v-main>
-    <!-- <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
+    <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
       <v-list>
         <v-list-item @click.native="right = !right">
           <v-list-item-action>
@@ -13,23 +14,24 @@
           <v-list-item-title>Switch drawer (click me)</v-list-item-title>
         </v-list-item>
       </v-list>
-    </v-navigation-drawer> -->
+    </v-navigation-drawer>
   </v-app>
 </template>
 
 <script>
 import socketClient from "socket.io-client";
 import Sidebar from "../components/Sidebar.vue";
+import Snackbar from "~/components/Snackbar.vue";
 
 export default {
   name: "DefaultLayout",
   components: {
     Sidebar,
-  },
+    Snackbar
+},
 
   data() {
     return {
-      drawer: true,
       items: [],
       right: true,
       rightDrawer: false,
