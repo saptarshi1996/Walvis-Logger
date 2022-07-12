@@ -16,11 +16,11 @@ Walvis is a small lightweight application with a web based interface to monitor 
 
 Walvis uses a number of tools and frameworks:
 
-- [Flask] - Used to build the backend server.
-- [Docker-Python-API] - For getting docker container related details.
+- [Express] - Used to build the backend server.
+- [Dockerode] - For getting docker container related details.
 - [NuxtJS] - For building the frontend along with Vue.
 - [Vuetify] - UI library used for Walvis.
-- [Server-Side-Events] - For real time streaming of stats and logs.
+- [SocketIO] - For real time streaming of stats and logs.
 - [Docker] - Without docker, there are no logs.
 - [Docker-Compose] - For building images and starting containers.
 
@@ -28,7 +28,7 @@ and Walvis itself :)
 
 ## Installation
 
-Walvis requires Node 14.17.3 for the frontend and Python 3.10.0 for the backend
+Walvis requires Node 14.17.3
 
 Install the dependencies and devDependencies and start the server.
 
@@ -36,11 +36,11 @@ Create a .env file in the client folder and add the following:
 
 ```bash
 
-PORT=3300
 HOST=0.0.0.0
-BASE_ENDPOINT=/logger
+PORT=3000
 
-SERVER_BASE_URL=http://localhost:9099
+BASE_URL=http://localhost:8000
+
 
 ```
 
@@ -48,17 +48,11 @@ Then create a .env file in the server folder and add the following:
 
 ```bash
 
-PORT=9099
-HOST=localhost
+PORT=8000
+HOST=0.0.0.0
+ENV=LOCAL
 
-FLASK_ENV=development
-FLASK_DEBUG=1
-
-JWT_SECRET_KEY=any-secret
-
-USER_NAME=admin
-PASSWORD=123456
-
+JWT_SECRET=
 
 ```
 
@@ -67,60 +61,7 @@ PASSWORD=123456
 # install dependencies
 $ npm install
 
-# install pip packages
-$ pip install -r requirements.txt
-$ python3 main.py
-
 ```
-
-
-## Development
-
-To start developing:
-
-```sh
-# serve with hot reload at localhost:3000
-$ npm run dev
-
-# build for production and launch server
-$ npm run build
-$ npm run generate
-
-# Flask runs on port 9099
-```
-
-### Deployment
-
-To deploy walvis production, it is recommended to deploy using nginx. 
-For nginx to pass server side events use the demo config.
-
-```
-location /logger { 
-    proxy_pass http://127.0.0.1:3300;
-    proxy_set_header Connection '';
-    chunked_transfer_encoding off;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Host $host;
-    proxy_cache_bypass $http_upgrade;
-    proxy_buffering off;
-    proxy_cache off;
-
-}
-
-location /logger-server { 
-    proxy_pass http://127.0.0.1:9099;
-    proxy_set_header Connection '';
-    chunked_transfer_encoding off;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Host $host;
-    proxy_cache_bypass $http_upgrade;
-    proxy_buffering off;
-    proxy_cache off;
-}
-```
-
 ## Docker
 
 
@@ -128,11 +69,11 @@ Run the Docker images and map the port to whatever you wish on your host.
 Note: It is mandatory to provide the volume, otherwise the container will not be able to get the logs.
 
 ```sh
-bash deploy.bash on
+docker run -p 8000:8000 -v /var/run/docker.sock:/var/run/docker.sock -d saptarshisg96/walvis-logger:latest
 ```
 
 You can then see the logger working on 
 
 ```sh
-127.0.0.1:3000
+http://127.0.0.1:8000
 ```
