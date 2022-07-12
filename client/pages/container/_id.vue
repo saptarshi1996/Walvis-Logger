@@ -36,9 +36,9 @@ export default {
   },
 
   async created() {
+    this.socketObject.emit("closeLogger");
     await this.$store.dispatch("clearAllLogs");
     await this.$store.dispatch("startLoadingLogs");
-    this.socketObject.emit("closeLogger");
     this.socketObject.emit(
       "fetchLogs",
       JSON.stringify({
