@@ -23,10 +23,14 @@ const { HOST, PORT } = process.env;
 app.use(express.static("dist"));
 app.use(cors());
 
+const distRouter = express.Router();
+
 // Render webpage after build.
-app.get("/", (req, res) => {
+distRouter.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
+
+app.use(process.env.END_POINT || '/', distRouter);
 
 app.use('/auth', authRoutes);
 app.use('/container', containerRoutes);
