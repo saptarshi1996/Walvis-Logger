@@ -9,9 +9,12 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@mdi/font": "^6.9.96",
     "@nuxtjs/auth": "^4.9.1",
     "@nuxtjs/axios": "^5.13.6",
     "core-js": "^3.19.3",
+    "import": "^0.0.6",
+    "material-design-icons-iconfont": "^6.7.0",
     "nuxt": "^2.15.8",
     "socket.io-client": "^4.5.1",
     "vue": "^2.6.14",
