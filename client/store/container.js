@@ -64,6 +64,11 @@ module.exports = {
         state.containers = state.containers.filter(container => container.id !== value.containerId);
         state.logs = [];
       } else {
+
+        if (state.logs.length > 200) {
+          console.log('remove first');
+          state.logs.splice(0, 1);
+        }
         state.logs.push(value);
       }
     },

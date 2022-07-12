@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app>
     <Sidebar :socketObject="socketObject" />
     <v-main>
       <NuxtChild :socketObject="socketObject" />
@@ -32,6 +32,15 @@ export default {
   },
 
   async mounted() {
+
+    if (!('showTimeStamp' in localStorage)) {
+      localStorage.setItem('showTimeStamp', false)
+    }
+
+    if (!('showDisabledContainer' in localStorage)) {
+      localStorage.setItem('showDisabledContainer', false)
+    }
+
     await this.connectSocket();
 
     this.socketObject.on("connect", () => {

@@ -54,6 +54,7 @@ io.on('connection', socket => {
   socket.on('closeLogger', async data => {
     if (socketStream && socketStream[socket.id]) {
       // Destroy the stream.
+      console.log('killing stream');
       await socketStream[socket.id].destroy();
     }
   });
