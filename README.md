@@ -44,7 +44,7 @@ BASE_URL=http://localhost:8000
 
 ```
 
-Then create a .env file in the server folder and add the following:
+Then create a .env file in the base folder and add the following:
 
 ```bash
 
