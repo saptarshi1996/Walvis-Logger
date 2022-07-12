@@ -3,13 +3,22 @@
     <v-list-item>
       <v-list-item-content>
         <v-list-item-title class="text-h6"> Walvis </v-list-item-title>
-        <v-list-item-subtitle class="mt-2"> CONTAINERS </v-list-item-subtitle>
+        <v-list-item-subtitle class="mt-2">
+          CONTAINERS
+          <v-btn class="ml-2" small @click.prevent="stopLoggingContainer"
+            >Stop</v-btn
+          >
+        </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
     <v-divider></v-divider>
     <v-list nav dense>
       <v-list-item-group>
-        <v-list-item v-for="(container, i) of containerList" :key="i" @click="getContainerLogs(container)">
+        <v-list-item
+          v-for="(container, i) of containerList"
+          :key="i"
+          @click="getContainerLogs(container)"
+        >
           <v-list-item-title>
             {{ container.name }}
           </v-list-item-title>
@@ -38,15 +47,15 @@ export default {
 
   computed: {
     ...mapGetters({
-      loadingLogs: 'getLoadingLogs',
+      loadingLogs: "getLoadingLogs",
       containerList: "getContainerList",
     }),
   },
 
   methods: {
     async getContainerLogs(container) {
-      await this.$store.dispatch('clearAllLogs');
-      await this.$store.dispatch('startLoadingLogs');
+      await this.$store.dispatch("clearAllLogs");
+      await this.$store.dispatch("startLoadingLogs");
       this.socketObject.emit(
         "fetchLogs",
         JSON.stringify({
@@ -55,6 +64,12 @@ export default {
         })
       );
     },
+
+    async stopLoggingContainer() {
+      this.socketObject.emit('closeLogger');
+      await this.$store.dispatch("clearAllLogs");
+    },
   },
+
 };
 </script>

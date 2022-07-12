@@ -41,8 +41,7 @@ export default {
 
   methods: {
     scrollToBottom() {
-      console.log(document.body.scrollHeight)
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     },
   },
 };

@@ -1,25 +1,15 @@
 <template>
   <v-app dark>
-    <!-- <Snackbar :snackbar="true" :timeout="2000" :text="'Container was closed'" /> -->
     <Sidebar :socketObject="socketObject" />
     <v-main>
       <NuxtChild :socketObject="socketObject" />
     </v-main>
-    <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light> mdi-repeat </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
   </v-app>
 </template>
 
 <script>
 import socketClient from "socket.io-client";
+
 import Sidebar from "../components/Sidebar.vue";
 import Snackbar from "~/components/Snackbar.vue";
 
@@ -27,14 +17,14 @@ export default {
   name: "DefaultLayout",
   components: {
     Sidebar,
-    Snackbar
-},
+    Snackbar,
+  },
 
   data() {
     return {
       items: [],
       right: true,
-      rightDrawer: false,
+      rightDrawer: true,
       title: "Walvis",
       socketObject: null,
       logsList: [],

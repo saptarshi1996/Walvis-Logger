@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'Snackbar',
-  props: ['snackbar', 'timeout', 'text'],
+  name: "Snackbar",
+  props: ["snackbar", "timeout", "text"],
 };
 </script>
