@@ -10,8 +10,8 @@
           </v-btn>
         </template>
         <v-list>
-          <v-list-item style="cursor: pointer;" v-for="(item, i) of items" :key="i">
-            <v-list-item-title @click.prevent="$router.push(item.router)">{{ item.name }}</v-list-item-title>
+          <v-list-item style="cursor: pointer;" v-for="(item, i) of items" :key="i" @click.prevent="$router.push(item.router)">
+            <v-list-item-title>{{ item.name }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>

@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12" class="p-4">
-      <v-container fluid>
+      <v-container>
         <h2>About</h2>
         <v-divider></v-divider>
         <p class="text-justify mt-5">
@@ -9,7 +9,7 @@
         </p>
       </v-container>
       <v-form class="p-4">
-        <v-container fluid>
+        <v-container>
           <h2>Settings</h2>
           <v-divider></v-divider>
           <v-row>
@@ -22,10 +22,7 @@
                 v-model="showDisabledContainer"
                 :label="`Show disabled containers`"
               ></v-switch>
-              <v-switch
-                v-model="streamLogs"
-                :label="`Stream Logs`"
-              ></v-switch>
+              <v-switch v-model="streamLogs" :label="`Stream Logs`"></v-switch>
             </v-col>
           </v-row>
         </v-container>
@@ -40,24 +37,24 @@ export default {
 
   data() {
     return {
-      showTimeStamp: localStorage.getItem('showTimeStamp'),
-      showDisabledContainer: localStorage.getItem('showDisabledContainer'),
-      streamLogs: localStorage.getItem('streamLogs'),
+      showTimeStamp: localStorage.getItem("showTimeStamp"),
+      showDisabledContainer: localStorage.getItem("showDisabledContainer"),
+      streamLogs: localStorage.getItem("streamLogs"),
     };
   },
 
   watch: {
     showTimeStamp(value) {
-      localStorage.setItem('showTimeStamp', value);
+      localStorage.setItem("showTimeStamp", value);
     },
 
     showDisabledContainer(value) {
-      localStorage.setItem('showDisabledContainer', value);
+      localStorage.setItem("showDisabledContainer", value);
     },
 
     streamLogs(value) {
-      localStorage.setItem('streamLogs', value);
+      localStorage.setItem("streamLogs", value);
     },
-  }
+  },
 };
 </script>
