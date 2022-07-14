@@ -21,6 +21,34 @@ exports.getAllContainers = () => new Promise(async (resolve, reject) => {
   }
 });
 
+exports.getDockerInfo = () => new Promise(async (resolve, reject) => {
+  try {
+
+    const {
+      Containers,
+      ContainersRunning,
+      Images,
+      Architecture,
+      NCPU,
+      MemTotal,
+    } = await docker.info();
+
+    resolve({
+      containers: Containers,
+      running: ContainersRunning,
+      images: Images,
+      system: Architecture,
+      cpu: NCPU,
+      memory: (MemTotal / (1024*1024*1024)).toFixed(2),
+    })
+
+  } catch (ex) {
+    reject({
+      message: ex.message,
+    })
+  }
+});
+
 exports.getContainerDetails = ({
   id,
 }) => new Promise(async (resolve, reject) => {

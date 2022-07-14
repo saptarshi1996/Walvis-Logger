@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <Sidebar :socketObject="socketObject" />
+    <HeaderComponent />
     <v-main>
       <NuxtChild :socketObject="socketObject" />
     </v-main>
@@ -10,6 +11,7 @@
 <script>
 import socketClient from "socket.io-client";
 
+import HeaderComponent from '../components/Header.vue'
 import Sidebar from "../components/Sidebar.vue";
 import Snackbar from "~/components/Snackbar.vue";
 
@@ -18,6 +20,7 @@ export default {
   components: {
     Sidebar,
     Snackbar,
+    HeaderComponent,
   },
 
   data() {
@@ -39,6 +42,10 @@ export default {
 
     if (!('showDisabledContainer' in localStorage)) {
       localStorage.setItem('showDisabledContainer', false)
+    }
+
+    if (!('streamLogs' in localStorage)) {
+      localStorage.setItem('streamLogs', true)
     }
 
     await this.connectSocket();
