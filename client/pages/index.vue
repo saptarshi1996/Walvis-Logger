@@ -1,31 +1,31 @@
 <template>
   <v-row class="pl-2 pr-2 mt-2">
     <v-col lg="2" align="center" class="mt-2">
-      <p class="text-h5 text--primary">63</p>
+      <p class="text-h5 text--primary">{{ dockerInfo.containers }}</p>
       <p class="text--primary">TOTAL</p>
     </v-col>
     <v-col lg="2" align="center" class="mt-2">
-      <p class="text-h5 text--primary">2</p>
+      <p class="text-h5 text--primary">{{ dockerInfo.running }}</p>
       <p class="text--primary">RUNNING</p>
     </v-col>
     <v-col lg="2" align="center" class="mt-2">
-      <p class="text-h5 text--primary">61</p>
-      <p class="text--primary">INACTIVE</p>
+      <p class="text-h5 text--primary">{{ dockerInfo.images }}</p>
+      <p class="text--primary">IMAGES</p>
     </v-col>
     <v-col lg="2" align="center" class="mt-2">
-      <p class="text-h5 text--primary">15%</p>
-      <p class=" text--primary">MEMORY</p>
-    </v-col>
-     <v-col lg="2" align="center" class="mt-2">
-      <p class="text-h5 text--primary">15%</p>
+      <p class="text-h5 text--primary">{{ dockerInfo.cpu }}</p>
       <p class="text--primary">CPU</p>
     </v-col>
-     <v-col lg="2" align="center" class="mt-2">
-      <p class="text-h5 text--primary">15%</p>
-      <p class="text--primary">CPU</p>
+    <v-col lg="2" align="center" class="mt-2">
+      <p class="text-h5 text--primary">{{ dockerInfo.memory }}</p>
+      <p class="text--primary">MEMORY</p>
+    </v-col>
+    <v-col lg="2" align="center" class="mt-2">
+      <p class="text-h5 text--primary">{{ dockerInfo.system }}</p>
+      <p class="text--primary">SYSTEM</p>
     </v-col>
 
-    <v-col lg="12" style="margin-top: 5%;">
+    <v-col lg="12" style="margin-top: 5%">
       <v-card class="mx-auto" max-width="600" outlined>
         <v-card-title>Containers</v-card-title>
         <v-divider></v-divider>
@@ -64,11 +64,14 @@ export default {
     };
   },
 
-  created() {},
+  async created() {
+    await this.$store.dispatch("getDockerInfo");
+  },
 
   computed: {
     ...mapGetters({
       containerList: "getContainerList",
+      dockerInfo: "getDockerInfo",
     }),
   },
 };

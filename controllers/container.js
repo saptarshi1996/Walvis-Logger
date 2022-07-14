@@ -11,6 +11,17 @@ exports.listContainers = async (req, res) => {
   }
 };
 
+exports.getDockerInfo = async (req, res) => {
+  try {
+    const containers = await dockerService.getDockerInfo();
+    return res.status(200).json(containers);
+  } catch (ex) {
+    return res.status(500).json({
+      message: ex.message,
+    })
+  }
+}
+
 exports.getContainerDetails = async (req, res) => {
   try {
     const container = await dockerService.getContainerDetails({

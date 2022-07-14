@@ -2,6 +2,7 @@ module.exports = {
   state: {
     logs: [],
     containers: [],
+    dockerInfo: {},
     loadingLogs: false,
   },
 
@@ -15,10 +16,12 @@ module.exports = {
     getLoadingLogs(state) {
       return state.loadingLogs;
     },
+    getDockerInfo(state) {
+      return state.dockerInfo;
+    },
   },
 
   actions: {
-
     clearAllLogs({ commit }) {
       commit('setClearAllLogs');
     },
@@ -32,9 +35,20 @@ module.exports = {
         });
         commit("setContainerList", response.data);
       } catch (ex) {
-        commit("setContainerList", {
-          message: ex.message,
+        console.log(ex.message);
+      }
+    },
+
+    async getDockerInfo({ commit }) {
+      try {
+        const response = await this.$axios.get('/container/getDockerInfo', {
+          headers: {
+            'content-type': 'application/json',
+          }
         });
+        commit('setDockerInfo', response.data)
+      } catch (ex) {
+        console.log(ex.message);
       }
     },
 
@@ -45,7 +59,6 @@ module.exports = {
     async addLogs({ commit }, data) {
       commit('setAddLogs', data);
     },
-
   },
 
   mutations: {
@@ -79,6 +92,10 @@ module.exports = {
 
     setStartLoadingLogs(state) {
       state.loadingLogs = true;
+    },
+
+    setDockerInfo(state, value) {
+      state.dockerInfo = value;
     },
   }
 };
