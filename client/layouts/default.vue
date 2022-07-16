@@ -75,3 +75,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+#app {
+  font-family: 'Lato', sans-serif;
+}
+</style>

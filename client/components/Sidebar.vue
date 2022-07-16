@@ -4,7 +4,6 @@
       <v-col lg="12">
         <v-list-item>
           <v-list-item-content>
-            <!-- <v-list-item-title @click.prevent="redirectTo('/')" class="text-h5" style="cursor: pointer;"> Walvis </v-list-item-title> -->
             <v-list-item-subtitle
               v-if="$route && $route.fullPath === '/'"
             >
@@ -25,7 +24,7 @@
       </v-col>
     </v-row>
     <v-divider></v-divider>
-    <v-list nav dense v-if="$route && ($route.fullPath.includes('/container') || $route.fullPath === '/')">
+    <v-list nav dense v-if="$route && ($route.fullPath.includes('/container'))">
       <v-list-item-group>
         <v-list-item
           v-for="(container, i) of containerList"

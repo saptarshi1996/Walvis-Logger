@@ -37,7 +37,7 @@
             ></v-text-field>
           </v-list-item-content>
         </v-list-item>
-        <v-list flat>
+        <v-list flat v-if="containerList && containerList.length > 0">
           <v-list-item-group v-model="selectedItem" color="primary">
             <v-list-item v-for="(container, i) in containerList" :key="i">
               <v-list-item-icon>
@@ -49,6 +49,9 @@
             </v-list-item>
           </v-list-item-group>
         </v-list>
+        <div v-else class="mx-auto" align="center">
+          <p class="text-h6 text--primary">No Containers found</p>
+        </div>
       </v-card>
     </v-col>
   </v-row>
