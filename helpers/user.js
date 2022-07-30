@@ -1,14 +1,8 @@
 require('dotenv').config();
 
-const brcypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const { JWT_SECRET } = process.env;
-
-exports.comparePassword = ({
-  password,
-  hash,
-}) => brcypt.compareSync(password, hash);
 
 exports.createToken = ({
   id,
