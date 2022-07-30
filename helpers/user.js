@@ -2,11 +2,15 @@ require('dotenv').config();
 
 const jwt = require('jsonwebtoken');
 
-const { JWT_SECRET } = process.env;
+const {
+  JWT_SECRET,
+  USER_NAME,
+  PASSWORD,
+} = process.env;
 
 exports.createToken = ({
-  id,
-}) => jwt.sign({ id }, JWT_SECRET, {
+  username,
+}) => jwt.sign({ username }, JWT_SECRET, {
   expiresIn: 60 * 60 * 3600,
 });
 
@@ -20,3 +24,11 @@ exports.verifyToken = ({
     reject(new Error(ex.message));
   }
 });
+
+exports.checkUser = ({
+  username,
+}) => USER_NAME === username;
+
+exports.checkPassword = ({
+  password,
+}) => PASSWORD === password;
