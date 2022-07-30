@@ -10,10 +10,7 @@
           <v-card-text>
             <v-list>
               <v-list-item>
-                <v-switch
-                  v-model="logMode"
-                  :label="`Stream Logs?`"
-                ></v-switch>
+                <v-switch v-model="logMode" :label="`Stream Logs?`"></v-switch>
               </v-list-item>
               <v-divider></v-divider>
               <v-list-item>
@@ -39,16 +36,16 @@
 
 <script>
 export default {
-
   created() {
-    this.$store.dispatch("getContainerList", "running")
+    this.$store.dispatch("getContainerList", "running");
   },
 
   data() {
     return {
-      logMode: localStorage.getItem('LOG_MODE') === 'STREAM',
-      showTimeStamp: localStorage.getItem('TIME_STAMP') === 'SHOW',
-      showStoppedContainer: localStorage.getItem('SHOW_DISABLED_CONTAINER') === 'YES',
+      logMode: localStorage.getItem("LOG_MODE") === "STREAM",
+      showTimeStamp: localStorage.getItem("TIME_STAMP") === "SHOW",
+      showStoppedContainer:
+        localStorage.getItem("SHOW_DISABLED_CONTAINER") === "YES",
     };
   },
 };

@@ -26,13 +26,13 @@ export default {
   },
 
   async created() {
-    if (!('LOG_MODE' in localStorage))
+    if (!("LOG_MODE" in localStorage))
       localStorage.setItem("LOG_MODE", "STREAM");
 
-    if (!('TIME_STAMP' in localStorage))
+    if (!("TIME_STAMP" in localStorage))
       localStorage.setItem("TIME_STAMP", "SHOW");
 
-    if (!('SHOW_DISABLED_CONTAINER' in localStorage))
+    if (!("SHOW_DISABLED_CONTAINER" in localStorage))
       localStorage.setItem("SHOW_DISABLED_CONTAINER", "NO");
   },
 

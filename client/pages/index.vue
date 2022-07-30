@@ -10,10 +10,7 @@
           <v-divider></v-divider>
           <v-card-text>
             <v-card>
-              <v-tabs
-                v-model="tab"
-                grow
-              >
+              <v-tabs v-model="tab" grow>
                 <v-tab
                   v-for="item in items"
                   :key="item"
@@ -31,7 +28,11 @@
                     </v-card-text>
                     <v-card-text
                       class="text-center mt-5"
-                      v-if="!loadingContainers && filteredList && filteredList.length === 0"
+                      v-if="
+                        !loadingContainers &&
+                        filteredList &&
+                        filteredList.length === 0
+                      "
                     >
                       <p class="text-h6">No containers found</p>
                     </v-card-text>
@@ -70,7 +71,7 @@
 <script>
 import { mapGetters } from "vuex";
 
-import Loader from '../components/Loader.vue';
+import Loader from "../components/Loader.vue";
 import Info from "../components/Info.vue";
 
 export default {
@@ -113,16 +114,17 @@ export default {
 
   computed: {
     filteredList() {
-
       if (!this.searchContainer) {
         return this.containers.slice(0, 10);
       }
 
-      return this.containers.filter((container) => {
-        return container.image
-          .toLowerCase()
-          .includes(this.searchContainer.toLowerCase());
-      }).slice(0, 10);
+      return this.containers
+        .filter((container) => {
+          return container.image
+            .toLowerCase()
+            .includes(this.searchContainer.toLowerCase());
+        })
+        .slice(0, 10);
     },
 
     scrollbarTheme() {
