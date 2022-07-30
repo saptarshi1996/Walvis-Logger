@@ -1,6 +1,6 @@
 const userHelper = require('../helpers/user');
 
-exports.authMiddleware = async (req, res, next) => {
+module.exports = async (req, res, next) => {
   try {
     const { authorization } = req.headers;
     const user = await userHelper.verifyToken({ authorization });
