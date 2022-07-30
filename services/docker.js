@@ -38,7 +38,7 @@ exports.getContainerDetails = ({
 });
 
 exports.restartContainer = ({
-  id
+  id,
 }) => new Promise(async (resolve, reject) => {
   try {
     await docker.getContainer(id).restart();
