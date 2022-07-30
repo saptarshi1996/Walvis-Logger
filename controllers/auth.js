@@ -13,7 +13,7 @@ exports.userLogin = async (req, res) => {
       throw new Error('User does not exists');
     }
 
-    if (userHelper.checkPassword({
+    if (!userHelper.checkPassword({
       password,
     })) {
       throw new Error('Invalid credentials');
@@ -36,9 +36,7 @@ exports.userLogin = async (req, res) => {
 exports.userDetails = (req, res) => {
   try {
     const { user } = req;
-    return res.status(200).json({
-      user,
-    });
+    return res.status(200).json(user);
   } catch (ex) {
     return res.status(500).json({
       message: ex.message,

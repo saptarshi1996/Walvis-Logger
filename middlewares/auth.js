@@ -3,12 +3,14 @@ const userHelper = require('../helpers/user');
 module.exports = async (req, res, next) => {
   try {
     const { authorization } = req.headers;
-    const user = await userHelper.verifyToken({ authorization });
+    const user = await userHelper.verifyToken({ token: authorization });
 
     if (!user) {
       throw new Error('Invalid credentials');
     } else {
-      req.user = user;
+      req.user = {
+        username: user.username,
+      };
       return next();
     }
   } catch (ex) {

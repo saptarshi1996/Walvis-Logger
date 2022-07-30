@@ -3,9 +3,7 @@ const dockerService = require('../services/docker');
 exports.getInfo = async (req, res) => {
   try {
     const info = await dockerService.getInfo();
-    return res.status(200).json({
-      data: info,
-    });
+    return res.status(200).json(info);
   } catch (ex) {
     return res.status(500).json({
       message: ex.message,
@@ -20,9 +18,7 @@ exports.listAllContainer = async (req, res) => {
       status,
     });
 
-    return res.status(200).json({
-      data: containerList
-    });
+    return res.status(200).json(containerList);
   } catch (ex) {
     return res.status(500).json({
       message: ex.message,
@@ -36,9 +32,7 @@ exports.containerDetails = async (req, res) => {
       id: req.params.id,
     });
 
-    return res.status(200).json({
-      data: containerDetails,
-    });
+    return res.status(200).json(containerDetails);
   } catch (ex) {
     return res.status(500).json({
       message: ex.message,
