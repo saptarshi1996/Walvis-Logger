@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-alert dense class="mb-0 ml-1">
-      <v-chip label class="mr-2">{{ source.timeStamp }}</v-chip
+      <v-chip v-if="showTimeStamp" label class="mr-2">{{ source.timeStamp }}</v-chip
       >{{ source.log }}
     </v-alert>
   </div>
@@ -9,6 +9,13 @@
 
 <script>
 export default {
-  props: ['index', 'source']
+  props: ['index', 'source'],
+
+  data() {
+    return {
+      showTimeStamp: localStorage.getItem("TIME_STAMP") === "SHOW",
+    }
+  }
+
 };
 </script>

@@ -93,7 +93,9 @@ export default {
 
   async created() {
     this.loadingContainers = true;
+    const status = localStorage.getItem("SHOW_DISABLED_CONTAINER") === "NO" ? "running" : "all";
     await Promise.all([
+      this.$store.dispatch("getContainerSideBar", status),
       this.$store.dispatch("getContainerList", "all"),
       this.$store.dispatch("getContainerList", "running"),
       this.$store.dispatch("getInfo"),

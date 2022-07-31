@@ -19,6 +19,7 @@
               <v-divider></v-divider>
               <v-list-item>
                 <v-switch
+                  @change="toggleTimeStamp"
                   v-model="showTimeStamp"
                   :label="`Show timestamps`"
                 ></v-switch>
@@ -48,8 +49,9 @@
 
 <script>
 export default {
-  created() {
-    this.$store.dispatch("getContainerList", "running");
+  async created() {
+    const status = localStorage.getItem("SHOW_DISABLED_CONTAINER") === "NO" ? "running" : "all";
+    await this.$store.dispatch("getContainerSideBar", status);
   },
 
   data() {
@@ -75,20 +77,32 @@ export default {
       if (this.showStoppedContainer) {
         localStorage.setItem("SHOW_DISABLED_CONTAINER", "YES");
       } else {
-        localStorage.setItem("SHOW_DISABLED_CONTAINER", "NO")
+        localStorage.setItem("SHOW_DISABLED_CONTAINER", "NO");
       }
-      await localStorage.getItem("SHOW_DISABLED_CONTAINER") === 'NO' 
-      ? this.$store.dispatch("getContainerList", "running")
-      : this.$store.dispatch("getContainerList", "all");
+      const status =
+        localStorage.getItem("SHOW_DISABLED_CONTAINER") === "NO"
+          ? "running"
+          : "all";
+      await this.$store.dispatch("getContainerSideBar", status);
+    },
+
+    toggleTimeStamp() {
+      if (this.showTimeStamp) {
+        localStorage.setItem("TIME_STAMP", "SHOW");
+      } else {
+        localStorage.setItem("TIME_STAMP", "HIDE");
+      }
     },
 
     handleDarkMode() {
       if (this.darkMode) {
         localStorage.setItem("DARK_MODE", "YES");
+        this.$vuetify.theme.dark = true;
       } else {
         localStorage.setItem("DARK_MODE", "NO");
+        this.$vuetify.theme.dark = false;
       }
-    }
+    },
   },
 };
 </script>

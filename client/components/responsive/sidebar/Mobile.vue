@@ -42,17 +42,13 @@ export default {
   props: ['drawer'],
 
   async created() {
-    (await localStorage.getItem("SHOW_DISABLED_CONTAINER")) === "NO"
-      ? this.$store.dispatch("getContainerList", "running")
-      : this.$store.dispatch("getContainerList", "all");
+    const status = localStorage.getItem("SHOW_DISABLED_CONTAINER") === "NO" ? "running" : "all";
+    await this.$store.dispatch("getContainerSideBar", status);
   },
 
   computed: {
     ...mapGetters({
-      containers:
-        localStorage.getItem("SHOW_DISABLED_CONTAINER") === "NO"
-          ? "getContainerRunning"
-          : "getContainer",
+      containers: "getContainerSideBar",
     }),
   },
 };

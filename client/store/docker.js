@@ -4,6 +4,7 @@ module.exports = {
   state: {
     containers: [],
     containersRunning: [],
+    containersSideBar: [],
     info: {},
   },
 
@@ -19,9 +20,23 @@ module.exports = {
     getInfo(state) {
       return state.info;
     },
+
+    getContainerSideBar(state) {
+      return state.containersSideBar;
+    }
   },
 
   actions: {
+
+    async getContainerSideBar({ commit }, status) {
+      try {
+        const { data } = await this.$axios.get(`${BASE_URL}/docker/containers?status=${status}`);
+        commit('SET_CONTAINER_SIDEBAR', data);
+      } catch (ex) {
+        console.log(ex);
+      }
+    },
+
     async getContainerList({ commit }, status) {
       try {
         const { data } = await this.$axios.get(`${BASE_URL}/docker/containers?status=${status}`);
@@ -34,12 +49,20 @@ module.exports = {
     async getInfo({ commit }) {
       try {
         const { data } = await this.$axios.get(`${BASE_URL}/docker/info`);
-        console.log(data);
         commit('SET_INFO', data);
       } catch (ex) {
         console.log(ex);
       }
-    }
+    },
+
+    async getLogsStatic({ commit }, params) {
+      try {
+        const { data } = await this.$axios.get(`${BASE_URL}/docker/logs/${params.id}`);
+        console.log(data);
+      } catch (ex) {
+        console.log(ex);
+      }
+    },
   },
 
   mutations: {
@@ -54,6 +77,10 @@ module.exports = {
 
     SET_INFO(state, value) {
       state.info = value;
+    },
+
+    SET_CONTAINER_SIDEBAR(state, value) {
+      state.containersSideBar = value;
     }
 
   }

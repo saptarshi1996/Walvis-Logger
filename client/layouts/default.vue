@@ -17,6 +17,10 @@ export default {
     Sidebar,
   },
 
+  mounted() {
+    this.$vuetify.theme.dark = localStorage.getItem("DARK_MODE") === "YES";
+  },
+
   async created() {
     if (!("LOG_MODE" in localStorage))
       localStorage.setItem("LOG_MODE", "STREAM");
