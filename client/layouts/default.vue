@@ -1,7 +1,6 @@
 <template>
   <v-app dark>
     <Sidebar :drawer="drawer" />
-    <Appbar />
     <v-main>
       <Nuxt />
     </v-main>
@@ -10,14 +9,12 @@
 
 <script>
 import Sidebar from "../components/Sidebar.vue";
-import Appbar from "../components/Appbar.vue";
 
 export default {
   name: "DefaultLayout",
 
   components: {
     Sidebar,
-    Appbar,
   },
 
   async created() {

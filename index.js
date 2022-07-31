@@ -116,6 +116,6 @@ io.on('connection', (socket) => {
       console.log('kill old stream');
       await socketStream[socket.id].destroy();
     }
-    console.log(reason);
+    console.log('socket id', socket.id, reason);
   });
 });

@@ -15,9 +15,11 @@
     "nuxt": "^2.15.8",
     "nuxt-mq": "^2.0.2",
     "socket.io-client": "^4.5.1",
+    "uuid": "^8.3.2",
     "vue": "^2.6.14",
     "vue-server-renderer": "^2.6.14",
     "vue-template-compiler": "^2.6.14",
+    "vue-virtual-scroll-list": "^2.3.3",
     "vuetify": "^2.6.1",
     "webpack": "^4.46.0"
   },
