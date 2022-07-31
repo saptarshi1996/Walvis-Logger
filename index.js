@@ -4,16 +4,12 @@ const express = require('express');
 const cors = require('cors');
 const stream = require('stream');
 const http = require('http');
+const path = require('path');
 
 const authRoute = require('./routes/auth');
 const dockerRoute = require('./routes/docker');
 
 const dockerService = require('./services/docker');
-
-const {
-  PORT,
-  HOST,
-} = process.env;
 
 const app = express();
 const server = http.createServer(app);
@@ -24,19 +20,27 @@ const io = require('socket.io', {
   },
 })(server);
 
+app.use(express.static('dist'));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({
   extended: false,
 }));
 
-const router = express.Router();
+const distRouter = express.Router();
 
-router.use('/auth', authRoute);
-router.use('/docker', dockerRoute);
+// Render webpage after build.
+distRouter.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
 
-app.use('/', router);
+app.use('/auth', authRoute);
+app.use('/docker', dockerRoute);
 
+app.use(process.env.END_POINT || '/', distRouter);
+
+const PORT = process.env.PORT || 8000;
+const HOST = process.env.HOST || '0.0.0.0';
 server.listen(PORT, HOST, () => console.log('Server on port', PORT));
 
 const socketStream = {};
@@ -92,14 +96,6 @@ const streamLogs = async ({
   }
 };
 
-const tidy = (s) => {
-  const rem = typeof s === 'string'
-    // eslint-disable-next-line no-control-regex
-    ? s.replace(/[\x00-\x1F\x7F-\xA0]+/g, '')
-    : s;
-  return rem.substring(1, rem.length);
-};
-
 const streamLogsStatic = async ({
   socketId,
   containerId,
@@ -113,15 +109,15 @@ const streamLogsStatic = async ({
       follow: false,
       stdout: true,
       stderr: true,
+      tail: 10000,
     });
 
     const data = logs.toString('utf-8');
     const logsList = data.split('\n');
     const logsCleared = logsList.map((log) => {
-      const cleared = tidy(log);
       const [date, time] = new Date().toISOString().split('T');
       return {
-        log: cleared,
+        log,
         timeStamp: `${date} ${time.substring(0, 8)}`,
         containerId,
       };
