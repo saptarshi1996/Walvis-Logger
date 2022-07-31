@@ -10,7 +10,11 @@
           <v-card-text>
             <v-list>
               <v-list-item>
-                <v-switch v-model="logMode" :label="`Stream Logs?`"></v-switch>
+                <v-switch
+                  @change="handleLogMode()"
+                  v-model="logMode"
+                  :label="`Stream Logs?`"
+                ></v-switch>
               </v-list-item>
               <v-divider></v-divider>
               <v-list-item>
@@ -22,8 +26,16 @@
               <v-divider></v-divider>
               <v-list-item>
                 <v-switch
+                  @change="handleStoppedContainer()"
                   v-model="showStoppedContainer"
                   :label="`Show stopped containers`"
+                ></v-switch>
+              </v-list-item>
+              <v-list-item>
+                <v-switch
+                  @change="handleDarkMode()"
+                  v-model="darkMode"
+                  :label="`Dark Mode`"
                 ></v-switch>
               </v-list-item>
             </v-list>
@@ -46,7 +58,37 @@ export default {
       showTimeStamp: localStorage.getItem("TIME_STAMP") === "SHOW",
       showStoppedContainer:
         localStorage.getItem("SHOW_DISABLED_CONTAINER") === "YES",
+      darkMode: localStorage.getItem("DARK_MODE") === "YES",
     };
+  },
+
+  methods: {
+    handleLogMode() {
+      if (this.logMode) {
+        localStorage.setItem("LOG_MODE", "STREAM");
+      } else {
+        localStorage.setItem("LOG_MODE", "STATIC");
+      }
+    },
+
+    async handleStoppedContainer() {
+      if (this.showStoppedContainer) {
+        localStorage.setItem("SHOW_DISABLED_CONTAINER", "YES");
+      } else {
+        localStorage.setItem("SHOW_DISABLED_CONTAINER", "NO")
+      }
+      await localStorage.getItem("SHOW_DISABLED_CONTAINER") === 'NO' 
+      ? this.$store.dispatch("getContainerList", "running")
+      : this.$store.dispatch("getContainerList", "all");
+    },
+
+    handleDarkMode() {
+      if (this.darkMode) {
+        localStorage.setItem("DARK_MODE", "YES");
+      } else {
+        localStorage.setItem("DARK_MODE", "NO");
+      }
+    }
   },
 };
 </script>

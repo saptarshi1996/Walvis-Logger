@@ -79,6 +79,17 @@ exports.getContainerDetails = ({
   }
 });
 
+exports.getContainer = ({
+  id,
+}) => new Promise(async (resolve, reject) => {
+  try {
+    const container = await docker.getContainer(id);
+    resolve(container);
+  } catch (ex) {
+    reject(new Error(ex.message));
+  }
+});
+
 exports.restartContainer = ({
   id,
 }) => new Promise(async (resolve, reject) => {

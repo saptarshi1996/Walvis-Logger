@@ -39,9 +39,15 @@ export default {
     Loader,
   },
 
+  async created() {
+    await localStorage.getItem("SHOW_DISABLED_CONTAINER") === 'NO' 
+      ? this.$store.dispatch("getContainerList", "running")
+      : this.$store.dispatch("getContainerList", "all");
+  },
+
   computed: {
     ...mapGetters({
-      containers: "getContainerRunning",
+      containers: localStorage.getItem("SHOW_DISABLED_CONTAINER") === 'NO' ? "getContainerRunning" : "getContainer",
     }),
   },
 };

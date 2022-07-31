@@ -1,7 +1,7 @@
 <template>
   <div>
     <Info />
-    <v-row justify="center" align="center">
+    <v-row class="mt-1" justify="center" align="center">
       <v-col cols="12" sm="8" md="8">
         <v-card elevation="6">
           <v-card-title class="headline text-uppercase">

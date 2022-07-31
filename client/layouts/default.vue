@@ -1,18 +1,11 @@
 <template>
-  <div v-if="$mq === 'lg'">
-    <v-app>
-      <Sidebar />
-      <v-app-bar fixed app dense> </v-app-bar>
-      <v-main>
-        <v-container>
-          <Nuxt />
-        </v-container>
-      </v-main>
-    </v-app>
-  </div>
-  <div v-else>
-    <p class="text-h4">Open in a laptop or computer</p>
-  </div>
+  <v-app dark>
+    <Sidebar />
+    <v-app-bar fixed app dense> </v-app-bar>
+    <v-main>
+      <Nuxt />
+    </v-main>
+  </v-app>
 </template>
 
 <script>
@@ -34,6 +27,8 @@ export default {
 
     if (!("SHOW_DISABLED_CONTAINER" in localStorage))
       localStorage.setItem("SHOW_DISABLED_CONTAINER", "NO");
+
+    if (!("DARK_MODE" in localStorage)) localStorage.setItem("DARK_MODE", "NO");
   },
 
   data() {
