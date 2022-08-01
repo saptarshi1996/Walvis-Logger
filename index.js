@@ -28,19 +28,21 @@ app.use(express.urlencoded({
 }));
 
 const distRouter = express.Router();
+const apiRouter = express.Router();
 
 // Render webpage after build.
 distRouter.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-app.use('/auth', authRoute);
-app.use('/docker', dockerRoute);
+apiRouter.use('/auth', authRoute);
+apiRouter.use('/docker', dockerRoute);
 
+app.use('/api', apiRouter);
 app.use(process.env.END_POINT || '/', distRouter);
 
-const PORT = process.env.PORT || 8000;
-const HOST = process.env.HOST || '0.0.0.0';
+const PORT = process.env.SERVER_PORT || 8000;
+const HOST = process.env.SERVER_HOST || '0.0.0.0';
 server.listen(PORT, HOST, () => console.log('Server on port', PORT));
 
 const socketStream = {};
