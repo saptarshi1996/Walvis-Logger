@@ -1,17 +1,13 @@
-require('dotenv').config()
-
-import colors from 'vuetify/es5/util/colors'
+import colors from 'vuetify/es5/util/colors';
 
 export default {
-  // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
-  ssr: false,
 
-  // Target: https://go.nuxtjs.dev/config-target
+  ssr: false,
   target: 'static',
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: 'Walvis Logger',
+    titleTemplate: 'Walvis',
     htmlAttrs: {
       lang: 'en'
     },
@@ -23,10 +19,6 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css?family=Lato:400,700'
-      },
     ]
   },
 
@@ -51,12 +43,24 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    [
+      'nuxt-mq',
+      {
+        // Default breakpoint for SSR
+        defaultBreakpoint: 'sm',
+        breakpoints: {
+          sm: 450,
+          md: 1250,
+          lg: Infinity
+        }
+      }
+    ],
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: process.env.BASE_URL,
+    baseURL: '/',
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
@@ -80,9 +84,5 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-  },
-
-  env: {
-    BASE_URL: process.env.BASE_URL,
   }
-}
+};
