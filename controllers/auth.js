@@ -1,33 +1,45 @@
-require('dotenv').config();
-const { USERNAME, PASSWORD } = process.env;
+const userHelper = require('../helpers/user');
 
-const userService = require('../services/user');
-
-exports.userLogin = (req, res) => {
+exports.userLogin = async (req, res) => {
   try {
-    const { username, password } = req.body;
-    if (username === USERNAME && password === PASSWORD) {
-      // create a token
-      const token = userService.generateToken({
-        payload: JSON.stringify({ username }),
-      });
-      return res.status(200).json({ token });
-    } else {
-      return res.status(403).json({
-        message: 'Invalid username or password',
-      });
+    const {
+      username,
+      password,
+    } = req.body;
+
+    if (!userHelper.checkUser({
+      username,
+    })) {
+      throw new Error('User does not exists');
     }
+
+    if (!userHelper.checkPassword({
+      password,
+    })) {
+      throw new Error('Invalid credentials');
+    }
+
+    const token = userHelper.createToken({
+      username,
+    });
+
+    return res.status(200).json({
+      token,
+    });
   } catch (ex) {
-    return res.status(500).json({ message: ex.message });
+    return res.status(500).json({
+      message: ex.message,
+    });
   }
 };
 
 exports.userDetails = (req, res) => {
   try {
-    return res.status(200).json({
-      username: USERNAME,
-    });
+    const { user } = req;
+    return res.status(200).json(user);
   } catch (ex) {
-    return res.status(500).json({ message: ex.message });
+    return res.status(500).json({
+      message: ex.message,
+    });
   }
 };

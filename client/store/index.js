@@ -1,7 +1,7 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-import containerStore from './container';
+import dockerStore from './docker';
 
 Vue.use(Vuex);
 
@@ -25,7 +25,7 @@ export default () => {
     },
 
     modules: {
-      containerStore,
+      dockerStore,
     },
   });
 };

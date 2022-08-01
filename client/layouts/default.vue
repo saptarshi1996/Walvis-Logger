@@ -1,70 +1,44 @@
 <template>
-  <v-app>
-    <Sidebar :socketObject="socketObject" />
+  <v-app dark>
+    <Sidebar :drawer="drawer" />
     <v-main>
-      <NuxtChild :socketObject="socketObject" />
+      <Nuxt />
     </v-main>
   </v-app>
 </template>
 
 <script>
-import socketClient from "socket.io-client";
-
 import Sidebar from "../components/Sidebar.vue";
-import Snackbar from "~/components/Snackbar.vue";
 
 export default {
   name: "DefaultLayout",
+
   components: {
     Sidebar,
-    Snackbar,
+  },
+
+  mounted() {
+    this.$vuetify.theme.dark = localStorage.getItem("DARK_MODE") === "YES";
+  },
+
+  async created() {
+    if (!("LOG_MODE" in localStorage))
+      localStorage.setItem("LOG_MODE", "STREAM");
+
+    if (!("TIME_STAMP" in localStorage))
+      localStorage.setItem("TIME_STAMP", "SHOW");
+
+    if (!("SHOW_DISABLED_CONTAINER" in localStorage))
+      localStorage.setItem("SHOW_DISABLED_CONTAINER", "NO");
+
+    if (!("DARK_MODE" in localStorage)) localStorage.setItem("DARK_MODE", "NO");
   },
 
   data() {
     return {
-      items: [],
-      right: true,
-      rightDrawer: true,
       title: "Walvis",
-      socketObject: null,
-      logsList: [],
+      drawer: true,
     };
-  },
-
-  async mounted() {
-
-    if (!('showTimeStamp' in localStorage)) {
-      localStorage.setItem('showTimeStamp', false)
-    }
-
-    if (!('showDisabledContainer' in localStorage)) {
-      localStorage.setItem('showDisabledContainer', false)
-    }
-
-    await this.connectSocket();
-
-    this.socketObject.on("connect", () => {
-      this.socketId = this.socketObject.id;
-      console.log(`Socket connected with id ${this.socketId}`);
-    });
-
-    this.socketObject.on("disconnect", () => {
-      console.log("socket disconnected");
-    });
-
-    this.socketObject.on("sendLogs", (data) => {
-      const payload = JSON.parse(data);
-      this.$store.dispatch("addLogs", payload);
-    });
-  },
-
-  methods: {
-    connectSocket() {
-      const socketUrl = process.env.BASE_URL;
-      this.socketObject = socketClient.connect(socketUrl, {
-        transports: ["websocket"],
-      });
-    },
   },
 };
 </script>
