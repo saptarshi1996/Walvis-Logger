@@ -33,7 +33,15 @@ exports.listAllContainers = ({
     if (!status || (status && status === 'running')) {
       conditionList = ['running'];
     } else if (status === 'all') {
-      conditionList = ['created', 'restarting', 'running', 'removing', 'paused', 'exited', 'dead'];
+      conditionList = [
+        'created',
+        'restarting',
+        'running',
+        'removing',
+        'paused',
+        'exited',
+        'dead',
+      ];
     }
 
     const containerList = await docker.listContainers({
