@@ -30,7 +30,7 @@ app.use(express.urlencoded({
 const distRouter = express.Router();
 
 // Render webpage after build.
-distRouter.get('/', (req, res) => {
+distRouter.get('/', (_, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
@@ -96,41 +96,40 @@ const streamLogs = async ({
   }
 };
 
-const streamLogsStatic = async ({
-  socketId,
-  containerId,
-}) => {
-  try {
-    const container = await dockerService.getContainer({
-      id: containerId,
-    });
+async function streamLogsStatic({
+    socketId, containerId,
+}) {
+    try {
+        const container = await dockerService.getContainer({
+            id: containerId,
+        });
 
-    const logs = await container.logs({
-      follow: false,
-      stdout: true,
-      stderr: true,
-      tail: 10000,
-    });
+        const logs = await container.logs({
+            follow: false,
+            stdout: true,
+            stderr: true,
+            tail: 10000,
+        });
 
-    const data = logs.toString('utf-8');
-    const logsList = data.split('\n');
-    const logsCleared = logsList.map((log) => {
-      const [date, time] = new Date().toISOString().split('T');
-      return {
-        log,
-        timeStamp: `${date} ${time.substring(0, 8)}`,
-        containerId,
-      };
-    });
+        const data = logs.toString('utf-8');
+        const logsList = data.split('\n');
+        const logsCleared = logsList.map((log) => {
+            const [date, time] = new Date().toISOString().split('T');
+            return {
+                log,
+                timeStamp: `${date} ${time.substring(0, 8)}`,
+                containerId,
+            };
+        });
 
-    io.to(socketId).emit('sendLogsStatic', JSON.stringify({
-      log: logsCleared,
-      containerId,
-    }));
-  } catch (ex) {
-    console.log(ex);
-  }
-};
+        io.to(socketId).emit('sendLogsStatic', JSON.stringify({
+            log: logsCleared,
+            containerId,
+        }));
+    } catch (ex) {
+        console.log(ex);
+    }
+}
 
 io.on('connection', (socket) => {
   socket.on('fetchLogs', async (data) => {
