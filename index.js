@@ -48,7 +48,8 @@ server.listen(PORT, HOST, () => console.log('Server on port', PORT));
 const socketStream = {};
 
 async function streamLogs({
-  socketId, containerId,
+  socketId,
+  containerId,
 }) {
   const logStream = new stream.PassThrough();
 
@@ -99,7 +100,8 @@ async function streamLogs({
 }
 
 async function streamLogsStatic({
-  socketId, containerId,
+  socketId,
+  containerId,
 }) {
   try {
     const container = await dockerService.getContainer({
