@@ -31,7 +31,7 @@ const distRouter = express.Router();
 const apiRouter = express.Router();
 
 // Render webpage after build.
-distRouter.get('/', (req, res) => {
+distRouter.get('/', (_, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
@@ -47,10 +47,9 @@ server.listen(PORT, HOST, () => console.log('Server on port', PORT));
 
 const socketStream = {};
 
-const streamLogs = async ({
-  socketId,
-  containerId,
-}) => {
+async function streamLogs({
+  socketId, containerId,
+}) {
   const logStream = new stream.PassThrough();
 
   try {
@@ -68,6 +67,7 @@ const streamLogs = async ({
       }));
     });
 
+    // Get containers.
     container.logs({
       follow: true,
       stdout: true,
@@ -96,12 +96,11 @@ const streamLogs = async ({
     console.log(ex);
     logStream.end('!stop!');
   }
-};
+}
 
-const streamLogsStatic = async ({
-  socketId,
-  containerId,
-}) => {
+async function streamLogsStatic({
+  socketId, containerId,
+}) {
   try {
     const container = await dockerService.getContainer({
       id: containerId,
@@ -132,7 +131,7 @@ const streamLogsStatic = async ({
   } catch (ex) {
     console.log(ex);
   }
-};
+}
 
 io.on('connection', (socket) => {
   socket.on('fetchLogs', async (data) => {
