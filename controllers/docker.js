@@ -1,6 +1,6 @@
 const dockerService = require('../services/docker');
 
-exports.getInfo = async (req, res) => {
+exports.getInfo = async (_, res) => {
   try {
     const info = await dockerService.getInfo();
     return res.status(200).json(info);
