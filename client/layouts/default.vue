@@ -13,6 +13,8 @@ import Sidebar from "../components/Sidebar.vue";
 export default {
   name: "DefaultLayout",
 
+  middleware: 'unauth',
+
   components: {
     Sidebar,
   },

@@ -42,6 +42,7 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
+    '@nuxtjs/auth',
     '@nuxtjs/axios',
     [
       'nuxt-mq',
@@ -56,6 +57,29 @@ export default {
       }
     ],
   ],
+
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            url: "http://localhost:8000/api/auth/userLogin",
+            method: "post",
+            propertyName: "token"
+          },
+          logout: false,
+          user: {
+            url: "http://localhost:8000/api/auth/userDetails",
+            method: "get",
+            propertyName: "username"
+          }
+        },
+        tokenRequired: true,
+        tokenType: null,
+      }
+    },
+    redirect: false,
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {

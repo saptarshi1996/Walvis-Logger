@@ -10,6 +10,9 @@
           <v-btn small @click.prevent="$router.push('/settings')">
             <v-icon>mdi-cog-outline</v-icon>
           </v-btn>
+          <v-btn small @click.prevent="logoutUser">
+            <v-icon>mdi-account-arrow-right</v-icon>
+          </v-btn>
         </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
