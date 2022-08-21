@@ -20,7 +20,7 @@ exports.listAllContainer = async (req, res) => {
 
     return res.status(200).json(containerList);
   } catch (ex) {
-    return res.status(500).json({
+    return res.status(ex.statusCode || 500).json({
       message: ex.message,
     });
   }
@@ -34,7 +34,7 @@ exports.containerDetails = async (req, res) => {
 
     return res.status(200).json(containerDetails);
   } catch (ex) {
-    return res.status(500).json({
+    return res.status(ex.statusCode || 500).json({
       message: ex.message,
     });
   }
@@ -49,7 +49,7 @@ exports.restartContainer = async (req, res) => {
       message: 'Container restarted successfully',
     });
   } catch (ex) {
-    return res.status(500).json({
+    return res.status(ex.statusCode || 500).json({
       message: ex.message,
     });
   }

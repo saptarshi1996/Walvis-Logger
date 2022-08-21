@@ -1,5 +1,8 @@
 const userHelper = require('../helpers/user');
 
+const NotFoundError = require('../errors/NotFoundError');
+const BadRequestError = require('../errors/BadRequestError');
+
 exports.userLogin = async (req, res) => {
   try {
     const {
@@ -10,13 +13,13 @@ exports.userLogin = async (req, res) => {
     if (!userHelper.checkUser({
       username,
     })) {
-      throw new Error('User does not exists');
+      throw new NotFoundError('User does not exists');
     }
 
     if (!userHelper.checkPassword({
       password,
     })) {
-      throw new Error('Invalid credentials');
+      throw new BadRequestError('Invalid credentials');
     }
 
     const token = userHelper.createToken({
@@ -27,7 +30,7 @@ exports.userLogin = async (req, res) => {
       token,
     });
   } catch (ex) {
-    return res.status(500).json({
+    return res.status(ex.statusCode || 500).json({
       message: ex.message,
     });
   }
@@ -38,7 +41,7 @@ exports.userDetails = (req, res) => {
     const { user } = req;
     return res.status(200).json(user);
   } catch (ex) {
-    return res.status(500).json({
+    return res.status(ex.statusCode || 500).json({
       message: ex.message,
     });
   }
