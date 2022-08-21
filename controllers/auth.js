@@ -22,9 +22,7 @@ exports.userLogin = async (req, res) => {
       throw new BadRequestError('Invalid credentials');
     }
 
-    const token = userHelper.createToken({
-      username,
-    });
+    const token = userHelper.createToken({ username });
 
     return res.status(200).json({
       token,
