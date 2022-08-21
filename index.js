@@ -6,6 +6,8 @@ const stream = require('stream');
 const http = require('http');
 const path = require('path');
 
+const authMiddleware = require('./middlewares/auth');
+
 const authRoute = require('./routes/auth');
 const dockerRoute = require('./routes/docker');
 
@@ -36,7 +38,7 @@ distRouter.get('/', (_, res) => {
 });
 
 apiRouter.use('/auth', authRoute);
-apiRouter.use('/docker', dockerRoute);
+apiRouter.use('/docker', authMiddleware, dockerRoute);
 
 app.use('/api', apiRouter);
 app.use(process.env.END_POINT || '/', distRouter);
