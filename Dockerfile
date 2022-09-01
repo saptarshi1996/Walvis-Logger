@@ -2,20 +2,26 @@ FROM node:16.16.0
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY ./server/package*.json /app/server/
 
-RUN npm install
+RUN cd /app/server && npm install
 
-RUN mkdir -p ./client
+RUN mkdir -p /app/client
 
-COPY ./client/package*.json ./client/
+COPY ./client/package*.json /app/client/
 
-RUN cd ./client && npm install && cd ..
+RUN cd ./client && npm install
 
-COPY . ./
+COPY ./client /app/client
 
-RUN rm -f -r ../dist && cd client && npm run build && npm run generate && mv dist ../ && cd ..
+COPY ./server/ /app/server/
 
-EXPOSE 8000
+RUN npm i pm2 -g
+
+RUN cd /app/client && npm run build
+
+COPY ./entrypoint.bash /app/
+
+EXPOSE 3000 8000
 
 CMD ["bash", "entrypoint.bash"]

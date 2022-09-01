@@ -107,7 +107,7 @@ export default {
     },
 
     connectSocket() {
-      const socketUrl = "http://localhost:8000";
+      const socketUrl = "http://0.0.0.0:8000";
       this.socketObject = socketClient.connect(socketUrl, {
         transports: ["websocket"],
       });
