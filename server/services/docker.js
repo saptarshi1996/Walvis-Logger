@@ -5,18 +5,20 @@ let docker;
 exports.connectInstance = ({
   environment,
 }) => new Promise((resolve, reject) => {
-
-  switch (environment) {
-    case 'LOCAL': {
-      docker = new Docker();
+  try {
+    switch (environment) {
+      case 'LOCAL': {
+        docker = new Docker();
+      }
+      default: {
+        docker = new Docker();
+      }
     }
-    default: {
-      docker = new Docker();
-    }
+  
+    resolve();
+  } catch (ex) {
+    reject(new Error(ex.stack));
   }
-
-  resolve();
-
 });
 
 exports.getInfo = () => new Promise(async (resolve, reject) => {
@@ -37,7 +39,7 @@ exports.getInfo = () => new Promise(async (resolve, reject) => {
       cpu: NCPU,
       memory: `${(MemTotal / (1024 * 1024 * 1024)).toFixed(2)} GB`,
     });
-  } catch (ex) {
+  } catch (ex) {a
     reject(new Error(ex.message));
   }
 });
