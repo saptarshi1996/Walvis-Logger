@@ -8,10 +8,10 @@
 
 <script>
 export default {
-	middleware: 'userauth',
+	middleware: 'unauth',
 
-	mounted() {
-		this.$vuetify.theme.dark = localStorage.getItem("DARK_MODE") === "YES";
-	}
+  mounted() {
+    this.$vuetify.theme.dark = localStorage.getItem("DARK_MODE") === "YES";
+  },
 }
 </script>

@@ -6,6 +6,7 @@ module.exports = {
     containersRunning: [],
     containersSideBar: [],
     info: {},
+    setupConnect: {},
   },
 
   getters: {
@@ -23,10 +24,23 @@ module.exports = {
 
     getContainerSideBar(state) {
       return state.containersSideBar;
-    }
+    },
+
+    getSetupConnect(state) {
+      return state.setupConnect;
+    },
   },
 
   actions: {
+
+    async setupConnect({ commit }, data) {
+      try {
+        await this.$axios.post(`${BASE_URL}/docker/connect`, { environment: data.environment });
+        commit('SET_SETUP_CONNECT');
+      } catch (ex) {
+        console.log(ex);
+      }
+    },
 
     async getContainerSideBar({ commit }, status) {
       try {
@@ -81,6 +95,12 @@ module.exports = {
 
     SET_CONTAINER_SIDEBAR(state, value) {
       state.containersSideBar = value;
+    },
+
+    SET_SETUP_CONNECT(state, value) {
+      state.setupConnect = {
+        "message": "Instance connected successfully",
+      };
     }
 
   }

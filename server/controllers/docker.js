@@ -54,3 +54,23 @@ exports.restartContainer = async (req, res) => {
     });
   }
 };
+
+exports.connectInstance = async (req, res) => {
+  try {
+
+    const { environment } = req.body
+
+    await dockerService.connectInstance({
+      environment,
+    });
+
+    console.log('connected');
+
+    return res.status(200).json({})
+
+  } catch (ex) {
+    return res.status(ex.statusCode || 500).json({
+      message: ex.message,
+    });
+  }
+};

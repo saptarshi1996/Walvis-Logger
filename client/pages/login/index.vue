@@ -58,7 +58,7 @@ export default {
 					}
 				})
 
-				this.$router.push('/')
+				this.$router.push('/instances')
 
 			} catch (ex) {
 				console.log(ex)

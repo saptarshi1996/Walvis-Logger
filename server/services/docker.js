@@ -1,6 +1,23 @@
 const Docker = require('dockerode');
 
-const docker = new Docker();
+let docker;
+
+exports.connectInstance = ({
+  environment,
+}) => new Promise((resolve, reject) => {
+
+  switch (environment) {
+    case 'LOCAL': {
+      docker = new Docker();
+    }
+    default: {
+      docker = new Docker();
+    }
+  }
+
+  resolve();
+
+});
 
 exports.getInfo = () => new Promise(async (resolve, reject) => {
   try {

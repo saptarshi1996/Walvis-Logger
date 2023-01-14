@@ -10,20 +10,17 @@ exports.userLogin = async (req, res) => {
       password,
     } = req.body;
 
-    if (!userHelper.checkUser({
-      username,
-    })) {
+    const userExists = userHelper.checkUser({ username })
+    if (!userExists) {
       throw new NotFoundError('User does not exists');
     }
 
-    if (!userHelper.checkPassword({
-      password,
-    })) {
+    const passwordMatch = userHelper.checkPassword({ password })
+    if (!passwordMatch) {
       throw new BadRequestError('Invalid credentials');
     }
 
     const token = userHelper.createToken({ username });
-
     return res.status(200).json({
       token,
     });

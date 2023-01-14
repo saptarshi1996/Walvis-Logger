@@ -54,5 +54,12 @@ export default {
       containers: "getContainerSideBar",
     }),
   },
+
+  methods: {
+    async logoutUser() {
+      await this.$auth.logout();
+      this.$router.push('/login');
+    },
+  }
 };
 </script>
