@@ -21,6 +21,15 @@ exports.connectInstance = ({
   }
 });
 
+exports.disconnectInstance = () => new Promise((resolve, reject) => {
+  try {
+    docker = null;
+    resolve();
+  } catch (ex) {
+    reject(new Error(ex.stack));
+  }
+});
+
 exports.getInfo = () => new Promise(async (resolve, reject) => {
   try {
     const {
@@ -39,7 +48,7 @@ exports.getInfo = () => new Promise(async (resolve, reject) => {
       cpu: NCPU,
       memory: `${(MemTotal / (1024 * 1024 * 1024)).toFixed(2)} GB`,
     });
-  } catch (ex) {a
+  } catch (ex) {
     reject(new Error(ex.message));
   }
 });

@@ -24,6 +24,17 @@ export default {
   },
 
   async created() {
+
+    // Check if the instances are present to connect.
+    if ('instances' in localStorage) {
+      const instances = localStorage.getItem('instances');
+      const instanceList = JSON.parse(instances);
+      if (instanceList.length === 0) {
+        this.$router.push('/instances');
+        return;
+      }
+    }
+
     if (
       "instanceSet" in localStorage &&
       localStorage.getItem("instanceSet") === "TRUE"

@@ -74,3 +74,14 @@ exports.connectInstance = async (req, res) => {
     });
   }
 };
+
+exports.disconnectInstance = async (req, res) => {
+  try {
+    await dockerService.disconnectInstance();
+    return res.status(200).json();
+  } catch (ex) {
+    return res.status(ex.statusCode || 500).json({
+      message: ex.message,
+    });
+  }
+}

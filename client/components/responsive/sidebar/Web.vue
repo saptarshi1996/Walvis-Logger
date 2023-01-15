@@ -10,6 +10,9 @@
           <v-btn small @click.prevent="$router.push('/settings')">
             <v-icon>mdi-cog-outline</v-icon>
           </v-btn>
+          <v-btn small @click.prevent="$router.push('/instances')">
+            <v-icon>mdi-database</v-icon>
+          </v-btn>
           <v-btn small @click.prevent="logoutUser">
             <v-icon>mdi-account-arrow-right</v-icon>
           </v-btn>
@@ -56,6 +59,7 @@ export default {
   methods: {
     async logoutUser() {
       await this.$auth.logout();
+      localStorage.setItem('instanceSet', 'FALSE');
       this.$router.push('/login');
     },
   }

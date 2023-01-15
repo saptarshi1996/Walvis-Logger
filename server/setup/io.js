@@ -32,7 +32,7 @@ async function streamLogs({
       }));
     });
 
-    // Get containers.
+    // Get containers logs.
     container.logs({
       follow: true,
       stdout: true,
