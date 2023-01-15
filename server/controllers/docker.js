@@ -84,4 +84,17 @@ exports.disconnectInstance = async (req, res) => {
       message: ex.message,
     });
   }
-}
+};
+
+exports.checkConnection = async (req, res) => {
+  try {
+    const instance = await dockerService.getInstance();
+    return res.status(200).json({
+      connected: instance ? true : false,
+    });
+  } catch (ex) {
+    return res.status(ex.statusCode || 500).json({
+      message: ex.message,
+    });
+  }
+};
