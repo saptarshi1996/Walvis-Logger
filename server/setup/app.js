@@ -11,7 +11,6 @@ const authMiddleware = require('../middlewares/auth');
 const authRoute = require('../routes/auth');
 const dockerRoute = require('../routes/docker');
 
-// app.use(express.static('dist'));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({
