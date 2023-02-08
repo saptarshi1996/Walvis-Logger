@@ -7,6 +7,7 @@ const http = require('http');
 const app = express();
 
 const authMiddleware = require('../middlewares/auth');
+const loggerMiddleware = require('../middlewares/logger');
 
 const authRoute = require('../routes/auth');
 const dockerRoute = require('../routes/docker');
@@ -22,7 +23,7 @@ const apiRouter = express.Router();
 apiRouter.use('/auth', authRoute);
 apiRouter.use('/docker', authMiddleware, dockerRoute);
 
-app.use('/api', apiRouter);
+app.use('/api', loggerMiddleware, apiRouter);
 
 const server = http.createServer(app);
 

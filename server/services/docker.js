@@ -9,12 +9,13 @@ exports.connectInstance = ({
     switch (environment) {
       case 'LOCAL': {
         docker = new Docker();
+        break;
       }
       default: {
         docker = new Docker();
+        break;
       }
     }
-  
     resolve();
   } catch (ex) {
     reject(new Error(ex.stack));
