@@ -2,33 +2,25 @@ require('dotenv').config();
 
 const jwt = require('jsonwebtoken');
 
+const UnAuthenticatedError = require('../errors/UnAuthenticatedError');
+
 const {
   JWT_SECRET,
   USER_NAME,
   PASSWORD,
 } = process.env;
 
-exports.createToken = ({
-  username,
-}) => jwt.sign({ username }, JWT_SECRET, {
-  expiresIn: 60 * 60 * 3600,
-});
+exports.createToken = ({ username }) => jwt.sign({ username }, JWT_SECRET, { expiresIn: 60 * 60 * 3600 });
 
-exports.verifyToken = ({
-  token,
-}) => new Promise((resolve, reject) => {
+exports.verifyToken = ({ token }) => {
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    resolve(decoded);
+    return decoded;
   } catch (ex) {
-    reject(new Error(ex.message));
+    throw new UnAuthenticatedError(ex.message);
   }
-});
+};
 
-exports.checkUser = ({
-  username,
-}) => USER_NAME === username;
+exports.checkUser = ({ username }) => USER_NAME === username;
 
-exports.checkPassword = ({
-  password,
-}) => PASSWORD === password;
+exports.checkPassword = ({ password }) => PASSWORD === password;

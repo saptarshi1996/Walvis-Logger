@@ -1,100 +1,53 @@
-const dockerService = require('../services/docker');
+const {
+  getInfo,
+  listAllContainers,
+  getContainerDetails,
+  restartContainer,
+  connectInstance,
+  disconnectInstance,
+} = require('../services/docker');
 
-exports.getInfo = async (_, res) => {
-  try {
-    const info = await dockerService.getInfo();
-    return res.status(200).json(info);
-  } catch (ex) {
-    return res.status(500).json({
-      message: ex.message,
-    });
-  }
+exports.getInfo = async () => {
+  const info = await getInfo();
+  return info;
 };
 
-exports.listAllContainer = async (req, res) => {
-  try {
-    const { query: { status } } = req;
-    const containerList = await dockerService.listAllContainers({
-      status,
-    });
+exports.listAllContainer = async (req) => {
+  const { query: { status } } = req;
+  const containerList = await listAllContainers({
+    status,
+  });
 
-    return res.status(200).json(containerList);
-  } catch (ex) {
-    return res.status(ex.statusCode || 500).json({
-      message: ex.message,
-    });
-  }
+  return containerList;
 };
 
-exports.containerDetails = async (req, res) => {
-  try {
-    const containerDetails = await dockerService.getContainerDetails({
-      id: req.params.id,
-    });
+exports.containerDetails = async (req) => {
+  const containerDetails = await getContainerDetails({
+    id: req.params.id,
+  });
 
-    return res.status(200).json(containerDetails);
-  } catch (ex) {
-    return res.status(ex.statusCode || 500).json({
-      message: ex.message,
-    });
-  }
+  return containerDetails;
 };
 
-exports.restartContainer = async (req, res) => {
-  try {
-    await dockerService.restartContainer({
-      id: req.params.id,
-    });
-    return res.status(200).json({
-      message: 'Container restarted successfully',
-    });
-  } catch (ex) {
-    return res.status(ex.statusCode || 500).json({
-      message: ex.message,
-    });
-  }
+exports.restartContainer = async (req) => {
+  const { id } = req.params;
+  await restartContainer({ id });
+  return {
+    message: 'Container restarted successfully',
+  };
 };
 
-exports.connectInstance = async (req, res) => {
-  try {
-
-    const { environment } = req.body
-
-    await dockerService.connectInstance({
-      environment,
-    });
-
-    console.log('connected');
-
-    return res.status(200).json({})
-
-  } catch (ex) {
-    return res.status(ex.statusCode || 500).json({
-      message: ex.message,
-    });
-  }
+exports.connectInstance = async (req) => {
+  const { environment } = req.body;
+  await connectInstance({ environment });
+  return {
+    message: 'Docker connected',
+  };
 };
 
-exports.disconnectInstance = async (req, res) => {
-  try {
-    await dockerService.disconnectInstance();
-    return res.status(200).json();
-  } catch (ex) {
-    return res.status(ex.statusCode || 500).json({
-      message: ex.message,
-    });
-  }
-};
-
-exports.checkConnection = async (req, res) => {
-  try {
-    const instance = await dockerService.getInstance();
-    return res.status(200).json({
-      connected: instance ? true : false,
-    });
-  } catch (ex) {
-    return res.status(ex.statusCode || 500).json({
-      message: ex.message,
-    });
-  }
+exports.disconnectInstance = async () => {
+  await disconnectInstance();
+  return {
+    message: 'Docker disconnected',
+  };
 };

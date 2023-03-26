@@ -1,14 +1,22 @@
 const router = require('express').Router();
 
-const dockerController = require('../controllers/docker');
+const wrapAsync = require('../middlewares/wrap-async');
 
-router.get('/info', dockerController.getInfo);
-router.get('/containers', dockerController.listAllContainer);
-router.get('/container/:id', dockerController.containerDetails);
-router.get('/container/restart/:id', dockerController.restartContainer);
-router.get('/disconnect', dockerController.disconnectInstance);
-router.get('/check', dockerController.checkConnection);
+const {
+  getInfo,
+  listAllContainer,
+  containerDetails,
+  restartContainer,
+  disconnectInstance,
+  connectInstance,
+} = require('../controllers/docker');
 
-router.post('/connect', dockerController.connectInstance);
+router.get('/info', wrapAsync(getInfo));
+router.get('/containers', wrapAsync(listAllContainer));
+router.get('/container/:id', wrapAsync(containerDetails));
+router.get('/container/restart/:id', wrapAsync(restartContainer));
+router.get('/disconnect', wrapAsync(disconnectInstance));
+
+router.post('/connect', wrapAsync(connectInstance));
 
 module.exports = router;

@@ -1,6 +1,6 @@
 const Docker = require('dockerode');
 
-let docker;
+let docker = new Docker();
 
 exports.connectInstance = ({
   environment,
@@ -116,24 +116,20 @@ exports.getContainerDetails = ({
   }
 });
 
-exports.getContainer = ({
-  id,
-}) => new Promise(async (resolve, reject) => {
+exports.getContainer = async ({ id }) => {
   try {
     const container = await docker.getContainer(id);
-    resolve(container);
+    return Promise.resolve(container);
   } catch (ex) {
-    reject(new Error(ex.message));
+    return Promise.reject(new Error(ex.message));
   }
-});
+};
 
-exports.restartContainer = ({
-  id,
-}) => new Promise(async (resolve, reject) => {
+exports.restartContainer = async ({ id }) => {
   try {
     await docker.getContainer(id).restart();
-    resolve();
+    return Promise.resolve();
   } catch (ex) {
-    reject(new Error(ex.message));
+    return Promise.reject(new Error(ex.message));
   }
-});
+};

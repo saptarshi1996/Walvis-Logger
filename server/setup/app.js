@@ -2,29 +2,30 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
-const http = require('http');
-
-const app = express();
+const { createServer } = require('http');
 
 const authMiddleware = require('../middlewares/auth');
-const loggerMiddleware = require('../middlewares/logger');
 
 const authRoute = require('../routes/auth');
+const userRoute = require('../routes/user');
 const dockerRoute = require('../routes/docker');
 
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({
-  extended: false,
-}));
+module.exports = async () => {
+  const app = express();
 
-const apiRouter = express.Router();
+  app.use(cors());
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: false }));
 
-apiRouter.use('/auth', authRoute);
-apiRouter.use('/docker', authMiddleware, dockerRoute);
+  const apiRouter = express.Router();
 
-app.use('/api', loggerMiddleware, apiRouter);
+  apiRouter.use('/auth', authRoute);
+  apiRouter.use('/user', authMiddleware, userRoute);
+  apiRouter.use('/docker', authMiddleware, dockerRoute);
 
-const server = http.createServer(app);
+  app.use('/api', apiRouter);
 
-module.exports = server;
+  const server = createServer(app);
+
+  return server;
+};
