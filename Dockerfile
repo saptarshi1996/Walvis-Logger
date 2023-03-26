@@ -1,4 +1,4 @@
-FROM node:16.16.0
+FROM node:16.19.0
 
 WORKDIR /app
 
@@ -20,8 +20,8 @@ RUN npm i pm2 -g
 
 RUN cd /app/client && npm run build
 
-COPY ./entrypoint.bash /app/
+COPY ./entrypoint.sh /app/
 
 EXPOSE 3000 8000
 
-CMD ["bash", "entrypoint.bash"]
+CMD ["./entrypoint.sh"]
