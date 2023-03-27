@@ -1,6 +1,6 @@
-const logger = require('../config/logger');
-
 require('dotenv').config();
+
+const logger = require('../config/logger');
 
 const { MIDDLEWARE_SECRET } = process.env;
 
