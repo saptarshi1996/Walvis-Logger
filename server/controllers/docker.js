@@ -14,18 +14,12 @@ exports.getInfo = async () => {
 
 exports.listAllContainer = async (req) => {
   const { query: { status } } = req;
-  const containerList = await listAllContainers({
-    status,
-  });
-
+  const containerList = await listAllContainers({ status });
   return containerList;
 };
 
 exports.containerDetails = async (req) => {
-  const containerDetails = await getContainerDetails({
-    id: req.params.id,
-  });
-
+  const containerDetails = await getContainerDetails({ id: req.params.id });
   return containerDetails;
 };
 

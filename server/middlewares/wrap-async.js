@@ -38,10 +38,7 @@ module.exports = (fn) => {
       }
 
       logger.error(`${req.method} | ${statusCode} | ${req.originalUrl}`);
-
-      return res.status(statusCode).json({
-        message: err.message,
-      });
+      return res.status(statusCode).json({ message: err.message });
     });
   };
 };

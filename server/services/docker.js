@@ -2,9 +2,7 @@ const Docker = require('dockerode');
 
 let docker = new Docker();
 
-exports.connectInstance = ({
-  environment,
-}) => new Promise((resolve, reject) => {
+exports.connectInstance = ({ environment }) => {
   try {
     switch (environment) {
       case 'LOCAL': {
@@ -16,22 +14,22 @@ exports.connectInstance = ({
         break;
       }
     }
-    resolve();
+    return Promise.resolve();
   } catch (ex) {
-    reject(new Error(ex.stack));
+    return Promise.reject(new Error(ex.stack));
   }
-});
+};
 
-exports.disconnectInstance = () => new Promise((resolve, reject) => {
+exports.disconnectInstance = async () => {
   try {
     docker = null;
-    resolve();
+    return Promise.resolve();
   } catch (ex) {
-    reject(new Error(ex.stack));
+    return Promise.reject(new Error(ex.stack));
   }
-});
+};
 
-exports.getInfo = () => new Promise(async (resolve, reject) => {
+exports.getInfo = async () => {
   try {
     const {
       Containers,
@@ -41,7 +39,7 @@ exports.getInfo = () => new Promise(async (resolve, reject) => {
       NCPU,
       MemTotal,
     } = await docker.info();
-    resolve({
+    return Promise.resolve({
       container: Containers,
       running: ContainersRunning,
       stopped: ContainersStopped,
@@ -50,13 +48,11 @@ exports.getInfo = () => new Promise(async (resolve, reject) => {
       memory: `${(MemTotal / (1024 * 1024 * 1024)).toFixed(2)} GB`,
     });
   } catch (ex) {
-    reject(new Error(ex.message));
+    return Promise.reject(new Error(ex.message));
   }
-});
+};
 
-exports.listAllContainers = ({
-  status,
-}) => new Promise(async (resolve, reject) => {
+exports.listAllContainers = async ({ status }) => {
   try {
     let conditionList = [];
     if (!status || (status && status === 'running')) {
@@ -74,47 +70,33 @@ exports.listAllContainers = ({
     }
 
     const containerList = await docker.listContainers({
-      filters: {
-        status: conditionList,
-      },
+      filters: { status: conditionList }
     });
 
-    const containers = containerList.map((container) => {
-      const {
-        Id,
-        Image,
-        Names,
-        ImageID,
-        State,
-        Status,
-      } = container;
-      return {
-        id: Id,
-        image: Image,
-        name: Names[0].substring(1, Names[0].length),
-        imageId: ImageID,
-        state: State,
-        status: Status,
-      };
-    });
-    resolve(containers);
+    const containers = containerList.map((container) => ({
+      id: container.Id,
+      image: container.Image,
+      name: container.Names[0].substring(1, container.Names[0].length),
+      imageId: container.ImageID,
+      state: container.State,
+      status: container.Status,
+    }));
+    return Promise.resolve(containers);
   } catch (ex) {
-    reject(new Error(ex.message));
+    return Promise.reject(new Error(ex.message));
   }
-});
+};
 
-exports.getContainerDetails = ({
-  id,
-}) => new Promise(async (resolve, reject) => {
+exports.getContainerDetails = async ({ id }) => {
   try {
     const container = await docker.getContainer(id).stats({
       stream: false,
     });
-    resolve(container);
+    return Promise.resolve(container);
   } catch (ex) {
-    reject(new Error(ex.message));
+    return Promise.reject(new Error(ex.message));
   }
-});
+};
 
 exports.getContainer = async ({ id }) => {
   try {
