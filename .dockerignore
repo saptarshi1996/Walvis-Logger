@@ -1,7 +1,0 @@
-server/.env
-server/node_modules/
-dist/
-client/node_modules
-client/dist
-client/.nuxt
-client/.env
